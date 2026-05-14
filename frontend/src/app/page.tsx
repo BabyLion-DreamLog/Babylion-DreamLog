@@ -2,6 +2,9 @@
 
 import Navbar from "@/components/Navbar";
 import { useState } from "react";
+import { Gowun_Batang } from "next/font/google";
+
+const gowunBatang = Gowun_Batang({ subsets: ["latin"], weight: "400" });
 
 export default function Home() {
   const weekDays = ["월", "화", "수", "목", "금", "토"];
@@ -15,43 +18,43 @@ export default function Home() {
   ];
 
   return (
-    <div style={{ backgroundColor: "#f7f7f4", minHeight: "100vh", fontFamily: "sans-serif" }}>
+    <div style={{ backgroundColor: "#fdfcf8", minHeight: "100vh", fontFamily: "sans-serif" }}>
       <Navbar />
 
       <div style={{ maxWidth: "1000px", margin: "0 auto", padding: "100px 40px 60px" }}>
 
         {/* 히어로 섹션 */}
         <div style={{
-          background: "linear-gradient(135deg, #7ab893 0%, #5a9e75 100%)",
+          background: "linear-gradient(135deg, #eef5eb 0%, #e3efe0 100%)",
           borderRadius: "24px",
-          padding: "52px 60px",
-          marginBottom: "32px",
+          padding: "48px 56px",
+          marginBottom: "28px",
           display: "flex",
           justifyContent: "space-between",
-          alignItems: "flex-end",
-          boxShadow: "0 8px 32px rgba(90,158,117,0.25)",
+          alignItems: "center",
+          boxShadow: "0 4px 20px rgba(66,107,54,0.10)",
         }}>
           <div>
-            <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.7)", marginBottom: "10px", letterSpacing: "0.5px" }}>
+            <p style={{ fontSize: "13px", color: "#426b36", marginBottom: "10px", letterSpacing: "0.5px", fontWeight: "500" }}>
               2026. 5. 10. 일요일
             </p>
-            <h1 style={{ fontSize: "32px", fontWeight: "600", color: "#fff", lineHeight: "1.4", marginBottom: "6px" }}>
+            <h1 className={gowunBatang.className} style={{ fontSize: "30px", color: "#1f2a1a", lineHeight: "1.55", marginBottom: "6px" }}>
               안녕하세요,<br />지우 부모님
             </h1>
-            <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.75)", marginTop: "12px" }}>
+            <p style={{ fontSize: "14px", color: "#6b7765", marginTop: "12px" }}>
               오늘 아이의 하루를 동화로 만들어볼까요?
             </p>
           </div>
           <button style={{
-            backgroundColor: "#fff",
-            color: "#5a9e75",
+            backgroundColor: "#5a8e4c",
+            color: "#fff",
             border: "none",
             borderRadius: "50px",
             padding: "14px 32px",
             fontSize: "15px",
             fontWeight: "600",
             cursor: "pointer",
-            boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
+            boxShadow: "0 4px 16px rgba(90,142,76,0.30)",
             whiteSpace: "nowrap",
           }}>
             새 동화 만들기 →
@@ -73,11 +76,11 @@ export default function Home() {
           }}>
             <div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
-                <span style={{ fontSize: "15px", fontWeight: "600", color: "#222" }}>이번 주 동화 기록</span>
+                <span style={{ fontSize: "15px", fontWeight: "600", color: "#1f2a1a" }}>이번 주 동화 기록</span>
                 <span style={{
                   fontSize: "11px",
                   backgroundColor: "#fff0ec",
-                  color: "#e07a5f",
+                  color: "#ec7d4e",
                   padding: "4px 12px",
                   borderRadius: "20px",
                   fontWeight: "500",
@@ -93,11 +96,11 @@ export default function Home() {
                       width: "42px",
                       height: "42px",
                       borderRadius: "50%",
-                      backgroundColor: completedDays[i] ? "#7ab893" : "#f2f2f2",
+                      backgroundColor: completedDays[i] ? "#5a8e4c" : "#f2f2f2",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      boxShadow: completedDays[i] ? "0 4px 10px rgba(122,184,147,0.4)" : "none",
+                      boxShadow: completedDays[i] ? "0 4px 10px rgba(90,142,76,0.30)" : "none",
                     }}>
                       {completedDays[i] && (
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -105,7 +108,7 @@ export default function Home() {
                         </svg>
                       )}
                     </div>
-                    <span style={{ fontSize: "11px", color: "#bbb" }}>{day}</span>
+                    <span style={{ fontSize: "11px", color: "#6b7765" }}>{day}</span>
                   </div>
                 ))}
               </div>
@@ -114,30 +117,31 @@ export default function Home() {
             {/* 하단 통계 2개 */}
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               <div style={{
-                backgroundColor: "#f7f7f4",
+                backgroundColor: "#fdfcf8",
                 borderRadius: "12px",
                 padding: "14px 18px",
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
+                border: "1px solid #ede9e0",
               }}>
-                <span style={{ fontSize: "13px", color: "#888" }}>
-                  이번 달 총 <strong style={{ color: "#222", fontWeight: "600" }}>18</strong>개 수집
+                <span style={{ fontSize: "13px", color: "#6b7765" }}>
+                  이번 달 총 <strong style={{ color: "#1f2a1a", fontWeight: "600" }}>18</strong>개 수집
                 </span>
-                <span style={{ fontSize: "12px", color: "#5a9e75", fontWeight: "500", cursor: "pointer" }}>전체 기록 →</span>
+                <span style={{ fontSize: "12px", color: "#426b36", fontWeight: "500", cursor: "pointer" }}>전체 기록 →</span>
               </div>
               <div style={{
-                backgroundColor: "#f0f8f3",
+                backgroundColor: "#eef5eb",
                 borderRadius: "12px",
                 padding: "14px 18px",
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
               }}>
-                <span style={{ fontSize: "13px", color: "#888" }}>
-                  이번 주 <strong style={{ color: "#222", fontWeight: "600" }}>4</strong>개 완성
+                <span style={{ fontSize: "13px", color: "#6b7765" }}>
+                  이번 주 <strong style={{ color: "#1f2a1a", fontWeight: "600" }}>4</strong>개 완성
                 </span>
-                <span style={{ fontSize: "12px", color: "#5a9e75", fontWeight: "500" }}>목표 6개</span>
+                <span style={{ fontSize: "12px", color: "#426b36", fontWeight: "500" }}>목표 6개</span>
               </div>
             </div>
           </div>
@@ -150,8 +154,8 @@ export default function Home() {
             boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
           }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
-              <span style={{ fontSize: "15px", fontWeight: "600", color: "#222" }}>최근 동화</span>
-              <span style={{ fontSize: "12px", color: "#5a9e75", fontWeight: "500", cursor: "pointer" }}>전체보기 →</span>
+              <span style={{ fontSize: "15px", fontWeight: "600", color: "#1f2a1a" }}>최근 동화</span>
+              <span style={{ fontSize: "12px", color: "#426b36", fontWeight: "500", cursor: "pointer" }}>전체보기 →</span>
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
@@ -166,7 +170,7 @@ export default function Home() {
                     justifyContent: "space-between",
                     padding: "14px 16px",
                     borderRadius: "14px",
-                    backgroundColor: hoveredStory === i ? "#f0f8f3" : "transparent",
+                    backgroundColor: hoveredStory === i ? "#eef5eb" : "transparent",
                     cursor: "pointer",
                     transition: "background 0.2s",
                   }}>
@@ -175,7 +179,7 @@ export default function Home() {
                       width: "44px",
                       height: "44px",
                       borderRadius: "12px",
-                      backgroundColor: hoveredStory === i ? "#7ab893" : "#f2f2f2",
+                      backgroundColor: hoveredStory === i ? "#5a8e4c" : "#f2f2f2",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -185,22 +189,22 @@ export default function Home() {
                       {story.emoji}
                     </div>
                     <div>
-                      <p style={{ fontSize: "14px", fontWeight: "500", color: "#222", marginBottom: "3px" }}>{story.title}</p>
-                      <p style={{ fontSize: "12px", color: "#bbb" }}>{story.sub}</p>
+                      <p style={{ fontSize: "14px", fontWeight: "500", color: "#1f2a1a", marginBottom: "3px" }}>{story.title}</p>
+                      <p style={{ fontSize: "12px", color: "#6b7765" }}>{story.sub}</p>
                     </div>
                   </div>
                   <div style={{
                     width: "32px",
                     height: "32px",
                     borderRadius: "50%",
-                    backgroundColor: hoveredStory === i ? "#7ab893" : "#f2f2f2",
+                    backgroundColor: hoveredStory === i ? "#5a8e4c" : "#f2f2f2",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     transition: "background 0.2s",
                   }}>
                     <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
-                      <path d="M3.5 2L8 5.5L3.5 9" stroke={hoveredStory === i ? "white" : "#bbb"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M3.5 2L8 5.5L3.5 9" stroke={hoveredStory === i ? "white" : "#6b7765"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </div>
                 </div>
