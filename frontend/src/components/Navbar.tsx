@@ -1,4 +1,17 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const NAV_ITEMS = [
+  { label: "홈", href: "/" },
+  { label: "내 책장", href: "/bookcase" },
+  { label: "리포트", href: "/report" },
+] as const;
+
 export default function Navbar() {
+  const pathname = usePathname();
+
   return (
     <nav style={{
       width: "100%",
@@ -15,21 +28,31 @@ export default function Navbar() {
       zIndex: 100,
       boxShadow: "0 1px 12px rgba(0,0,0,0.06)",
     }}>
-      <span style={{ fontSize: "20px", fontWeight: "700", color: "#426b36", letterSpacing: "-0.5px" }}>
-        DreamLog
-      </span>
+      <Link href="/" style={{ textDecoration: "none" }}>
+        <span style={{ fontSize: "20px", fontWeight: "700", color: "#426b36", letterSpacing: "-0.5px" }}>
+          DreamLog
+        </span>
+      </Link>
 
       <div style={{ display: "flex", gap: "36px", alignItems: "center" }}>
-        {["홈", "내 책장", "리포트"].map((menu) => (
-          <span key={menu} style={{
-            fontSize: "14px",
-            color: menu === "홈" ? "#426b36" : "#6b7765",
-            cursor: "pointer",
-            fontWeight: menu === "홈" ? "600" : "400",
-          }}>
-            {menu}
-          </span>
-        ))}
+        {NAV_ITEMS.map(({ label, href }) => {
+          const active = pathname === href || (href !== "/" && pathname.startsWith(href + "/"));
+          return (
+            <Link
+              key={href}
+              href={href}
+              style={{
+                fontSize: "14px",
+                color: active ? "#426b36" : "#6b7765",
+                cursor: "pointer",
+                fontWeight: active ? "600" : "400",
+                textDecoration: "none",
+              }}
+            >
+              {label}
+            </Link>
+          );
+        })}
       </div>
     </nav>
   );
