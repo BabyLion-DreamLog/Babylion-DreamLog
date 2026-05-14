@@ -1,11 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useStoryStore } from "@/store/storyStore";
 import { Gowun_Batang } from "next/font/google";
 
 const gowunBatang = Gowun_Batang({ subsets: ["latin"], weight: "400" });
+
+const CREATE_STORY_FORM_ID = "create-story-form";
 
 export default function CreateStory() {
   const router = useRouter();
@@ -14,6 +16,11 @@ export default function CreateStory() {
   const [duration, setDuration] = useState(8);
   const [selectedVoice, setSelectedVoice] = useState(0);
   const [errors, setErrors] = useState({ place: false, name: false, activity: false });
+
+  const daySectionRef = useRef<HTMLElement>(null);
+  const placeInputRef = useRef<HTMLInputElement>(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const activityInputRef = useRef<HTMLInputElement>(null);
 
   const kids = [
     { name: "지우", role: "우리 아이", emoji: "🐱" },
@@ -39,8 +46,16 @@ export default function CreateStory() {
       activity: !activity.trim(),
     };
     setErrors(newErrors);
-    if (Object.values(newErrors).some(Boolean)) return;
-    router.push("/generate");
+    if (Object.values(newErrors).some(Boolean)) {
+      queueMicrotask(() => {
+        daySectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+        if (newErrors.place) placeInputRef.current?.focus();
+        else if (newErrors.name) nameInputRef.current?.focus();
+        else activityInputRef.current?.focus();
+      });
+      return;
+    }
+    router.push("/story");
   };
 
   const inputStyle = {
@@ -70,6 +85,7 @@ export default function CreateStory() {
         zIndex: 10,
       }}>
         <button
+          type="button"
           onClick={() => router.back()}
           style={{
             width: "36px", height: "36px", borderRadius: "50%",
@@ -88,10 +104,17 @@ export default function CreateStory() {
         </span>
       </div>
 
-      <div style={{ maxWidth: "600px", margin: "0 auto", padding: "32px 24px 120px" }}>
+      <form
+        id={CREATE_STORY_FORM_ID}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+        style={{ maxWidth: "600px", margin: "0 auto", padding: "32px 24px 120px" }}
+      >
 
         {/* 아이의 하루 입력 */}
-        <section style={{ marginBottom: "36px" }}>
+        <section ref={daySectionRef} style={{ marginBottom: "36px" }}>
           <h2 style={{ fontSize: "15px", fontWeight: "600", color: "#1f2a1a", marginBottom: "6px" }}>
             오늘 아이의 하루는 어땠나요?
           </h2>
@@ -114,6 +137,7 @@ export default function CreateStory() {
                 📍 장소
               </label>
               <input
+                ref={placeInputRef}
                 value={place}
                 onChange={(e) => {
                   setInput("place", e.target.value);
@@ -133,6 +157,7 @@ export default function CreateStory() {
                 👤 이름
               </label>
               <input
+                ref={nameInputRef}
                 value={name}
                 onChange={(e) => {
                   setInput("name", e.target.value);
@@ -152,6 +177,7 @@ export default function CreateStory() {
                 🌟 활동
               </label>
               <input
+                ref={activityInputRef}
                 value={activity}
                 onChange={(e) => {
                   setInput("activity", e.target.value);
@@ -280,6 +306,7 @@ export default function CreateStory() {
             border: "1px solid #ede9e0",
           }}>
             <button
+              type="button"
               onClick={() => setDuration((d) => Math.max(1, d - 1))}
               style={{
                 width: "32px", height: "32px", borderRadius: "50%",
@@ -293,6 +320,7 @@ export default function CreateStory() {
               {duration}분
             </span>
             <button
+              type="button"
               onClick={() => setDuration((d) => Math.min(30, d + 1))}
               style={{
                 width: "32px", height: "32px", borderRadius: "50%",
@@ -342,7 +370,7 @@ export default function CreateStory() {
           </div>
         </section>
 
-      </div>
+      </form>
 
       {/* 하단 고정 버튼 */}
       <div style={{
@@ -351,10 +379,12 @@ export default function CreateStory() {
         padding: "16px 24px 32px",
         backgroundColor: "#fdfcf8",
         borderTop: "1px solid #ede9e0",
+        zIndex: 20,
       }}>
         <div style={{ maxWidth: "600px", margin: "0 auto" }}>
           <button
-            onClick={handleSubmit}
+            type="submit"
+            form={CREATE_STORY_FORM_ID}
             style={{
               width: "100%",
               backgroundColor: "#5a8e4c",
