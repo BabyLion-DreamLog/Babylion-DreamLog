@@ -2,6 +2,7 @@
 
 import Navbar from "@/components/Navbar";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { Gowun_Batang } from "next/font/google";
 
