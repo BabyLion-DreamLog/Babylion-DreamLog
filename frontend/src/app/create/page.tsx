@@ -3,6 +3,9 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useStoryStore } from "@/store/storyStore";
+import { Gowun_Batang } from "next/font/google";
+
+const gowunBatang = Gowun_Batang({ subsets: ["latin"], weight: "400" });
 
 export default function CreateStory() {
   const router = useRouter();
@@ -45,14 +48,14 @@ export default function CreateStory() {
     border: "none",
     outline: "none",
     fontSize: "14px",
-    color: "#333",
+    color: "#1f2a1a",
     backgroundColor: "transparent",
     fontFamily: "sans-serif",
     boxSizing: "border-box" as const,
   };
 
   return (
-    <div style={{ backgroundColor: "#f7f7f4", minHeight: "100vh", fontFamily: "sans-serif" }}>
+    <div style={{ backgroundColor: "#fdfcf8", minHeight: "100vh", fontFamily: "sans-serif" }}>
 
       {/* 상단 헤더 */}
       <div style={{
@@ -61,7 +64,7 @@ export default function CreateStory() {
         display: "flex",
         alignItems: "center",
         gap: "16px",
-        borderBottom: "0.5px solid #eee",
+        borderBottom: "1px solid #ede9e0",
         position: "sticky",
         top: 0,
         zIndex: 10,
@@ -70,37 +73,44 @@ export default function CreateStory() {
           onClick={() => router.back()}
           style={{
             width: "36px", height: "36px", borderRadius: "50%",
-            backgroundColor: "#f2f2f2", border: "none", cursor: "pointer",
+            backgroundColor: "#fdfcf8", border: "1px solid #ede9e0",
+            cursor: "pointer",
             display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: "16px",
+            fontSize: "16px", color: "#3e4a37",
           }}>
           ←
         </button>
-        <span style={{ fontSize: "18px", fontWeight: "600", color: "#222" }}>오늘의 동화 만들기</span>
+        <span
+          className={gowunBatang.className}
+          style={{ fontSize: "18px", color: "#1f2a1a" }}
+        >
+          오늘의 동화 만들기
+        </span>
       </div>
 
       <div style={{ maxWidth: "600px", margin: "0 auto", padding: "32px 24px 120px" }}>
 
         {/* 아이의 하루 입력 */}
         <section style={{ marginBottom: "36px" }}>
-          <h2 style={{ fontSize: "16px", fontWeight: "600", color: "#222", marginBottom: "6px" }}>
+          <h2 style={{ fontSize: "15px", fontWeight: "600", color: "#1f2a1a", marginBottom: "6px" }}>
             오늘 아이의 하루는 어땠나요?
           </h2>
-          <p style={{ fontSize: "13px", color: "#aaa", marginBottom: "16px" }}>
+          <p style={{ fontSize: "13px", color: "#6b7765", marginBottom: "16px" }}>
             장소, 이름, 활동을 모두 입력해주세요
           </p>
 
           <div style={{
             backgroundColor: "#fff",
             borderRadius: "16px",
-            border: errors.place || errors.name || errors.activity ? "1.5px solid #e07a5f" : "1.5px solid #e8e8e8",
-            boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
+            border: errors.place || errors.name || errors.activity
+              ? "1.5px solid #ec7d4e"
+              : "1.5px solid #ede9e0",
+            boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
             overflow: "hidden",
           }}>
-
             {/* 장소 */}
-            <div style={{ padding: "16px 20px", borderBottom: "1px solid #f0f0f0" }}>
-              <label style={{ fontSize: "12px", fontWeight: "600", color: "#5a9e75", display: "block", marginBottom: "6px" }}>
+            <div style={{ padding: "16px 20px", borderBottom: "1px solid #ede9e0" }}>
+              <label style={{ fontSize: "12px", fontWeight: "600", color: "#426b36", display: "block", marginBottom: "6px" }}>
                 📍 장소
               </label>
               <input
@@ -113,13 +123,13 @@ export default function CreateStory() {
                 style={inputStyle}
               />
               {errors.place && (
-                <p style={{ fontSize: "12px", color: "#e07a5f", marginTop: "4px" }}>장소를 입력해주세요</p>
+                <p style={{ fontSize: "12px", color: "#ec7d4e", marginTop: "4px" }}>장소를 입력해주세요</p>
               )}
             </div>
 
             {/* 이름 */}
-            <div style={{ padding: "16px 20px", borderBottom: "1px solid #f0f0f0" }}>
-              <label style={{ fontSize: "12px", fontWeight: "600", color: "#5a9e75", display: "block", marginBottom: "6px" }}>
+            <div style={{ padding: "16px 20px", borderBottom: "1px solid #ede9e0" }}>
+              <label style={{ fontSize: "12px", fontWeight: "600", color: "#426b36", display: "block", marginBottom: "6px" }}>
                 👤 이름
               </label>
               <input
@@ -132,13 +142,13 @@ export default function CreateStory() {
                 style={inputStyle}
               />
               {errors.name && (
-                <p style={{ fontSize: "12px", color: "#e07a5f", marginTop: "4px" }}>이름을 입력해주세요</p>
+                <p style={{ fontSize: "12px", color: "#ec7d4e", marginTop: "4px" }}>이름을 입력해주세요</p>
               )}
             </div>
 
             {/* 활동 */}
             <div style={{ padding: "16px 20px" }}>
-              <label style={{ fontSize: "12px", fontWeight: "600", color: "#5a9e75", display: "block", marginBottom: "6px" }}>
+              <label style={{ fontSize: "12px", fontWeight: "600", color: "#426b36", display: "block", marginBottom: "6px" }}>
                 🌟 활동
               </label>
               <input
@@ -151,16 +161,15 @@ export default function CreateStory() {
                 style={inputStyle}
               />
               {errors.activity && (
-                <p style={{ fontSize: "12px", color: "#e07a5f", marginTop: "4px" }}>활동을 입력해주세요</p>
+                <p style={{ fontSize: "12px", color: "#ec7d4e", marginTop: "4px" }}>활동을 입력해주세요</p>
               )}
             </div>
-
           </div>
         </section>
 
         {/* 누가 사용하나요 */}
         <section style={{ marginBottom: "36px" }}>
-          <h2 style={{ fontSize: "16px", fontWeight: "600", color: "#222", marginBottom: "16px" }}>
+          <h2 style={{ fontSize: "15px", fontWeight: "600", color: "#1f2a1a", marginBottom: "16px" }}>
             누가 사용하나요?
           </h2>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
@@ -169,8 +178,8 @@ export default function CreateStory() {
                 key={kid.name}
                 onClick={() => toggleKid(i)}
                 style={{
-                  backgroundColor: selectedKids.includes(i) ? "#f0f8f3" : "#fff",
-                  border: selectedKids.includes(i) ? "1.5px solid #7ab893" : "1.5px solid #eee",
+                  backgroundColor: selectedKids.includes(i) ? "#eef5eb" : "#fff",
+                  border: selectedKids.includes(i) ? "1.5px solid #5a8e4c" : "1.5px solid #ede9e0",
                   borderRadius: "14px",
                   padding: "14px 16px",
                   display: "flex",
@@ -178,23 +187,24 @@ export default function CreateStory() {
                   justifyContent: "space-between",
                   cursor: "pointer",
                   boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                  transition: "all 0.15s",
                 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                   <div style={{
                     width: "40px", height: "40px", borderRadius: "50%",
-                    backgroundColor: selectedKids.includes(i) ? "#d4ead9" : "#f2f2f2",
+                    backgroundColor: selectedKids.includes(i) ? "#d4e8d0" : "#f2f2f2",
                     display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px",
                   }}>
                     {kid.emoji}
                   </div>
                   <div>
-                    <p style={{ fontSize: "14px", fontWeight: "500", color: "#222" }}>{kid.name}</p>
-                    <p style={{ fontSize: "12px", color: "#aaa" }}>{kid.role}</p>
+                    <p style={{ fontSize: "14px", fontWeight: "500", color: "#1f2a1a", margin: 0 }}>{kid.name}</p>
+                    <p style={{ fontSize: "12px", color: "#6b7765", margin: 0 }}>{kid.role}</p>
                   </div>
                 </div>
                 <div style={{
                   width: "22px", height: "22px", borderRadius: "50%",
-                  backgroundColor: selectedKids.includes(i) ? "#7ab893" : "#eee",
+                  backgroundColor: selectedKids.includes(i) ? "#5a8e4c" : "#ede9e0",
                   display: "flex", alignItems: "center", justifyContent: "center",
                 }}>
                   {selectedKids.includes(i) && (
@@ -207,14 +217,14 @@ export default function CreateStory() {
             ))}
 
             <div style={{
-              border: "1.5px dashed #ccc",
+              border: "1.5px dashed #c8ddbb",
               borderRadius: "14px",
               padding: "14px 16px",
               display: "flex",
               alignItems: "center",
               gap: "10px",
               cursor: "pointer",
-              color: "#bbb",
+              color: "#6b7765",
             }}>
               <div style={{
                 width: "40px", height: "40px", borderRadius: "50%",
@@ -227,29 +237,27 @@ export default function CreateStory() {
             </div>
           </div>
 
-          {/* 1명 선택 시 */}
           {selectedKids.length === 1 && (
             <div style={{
               marginTop: "12px",
-              backgroundColor: "#f0f8f3",
+              backgroundColor: "#eef5eb",
               borderRadius: "12px",
               padding: "12px 16px",
               fontSize: "13px",
-              color: "#5a9e75",
+              color: "#426b36",
             }}>
               ✨ {kids[selectedKids[0]].name}가 주인공이 되는 이야기를 만들어드릴게요
             </div>
           )}
 
-          {/* 2명 이상 선택 시 */}
           {selectedKids.length >= 2 && (
             <div style={{
               marginTop: "12px",
-              backgroundColor: "#f0f8f3",
+              backgroundColor: "#eef5eb",
               borderRadius: "12px",
               padding: "12px 16px",
               fontSize: "13px",
-              color: "#5a9e75",
+              color: "#426b36",
             }}>
               ✨ {kids.filter((_, i) => selectedKids.includes(i)).map(k => k.name).join("와 ")}가 함께 할 수 있는 이야기를 만들어드릴게요
             </div>
@@ -258,7 +266,7 @@ export default function CreateStory() {
 
         {/* 동화 길이 설정 */}
         <section style={{ marginBottom: "36px" }}>
-          <h2 style={{ fontSize: "16px", fontWeight: "600", color: "#222", marginBottom: "16px" }}>
+          <h2 style={{ fontSize: "15px", fontWeight: "600", color: "#1f2a1a", marginBottom: "16px" }}>
             동화 길이 설정
           </h2>
           <div style={{
@@ -268,27 +276,29 @@ export default function CreateStory() {
             backgroundColor: "#fff",
             borderRadius: "50px",
             padding: "10px 24px",
-            boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
-            border: "1px solid #eee",
+            boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
+            border: "1px solid #ede9e0",
           }}>
             <button
               onClick={() => setDuration((d) => Math.max(1, d - 1))}
               style={{
                 width: "32px", height: "32px", borderRadius: "50%",
-                backgroundColor: "#f2f2f2", border: "none", fontSize: "18px", cursor: "pointer",
-                display: "flex", alignItems: "center", justifyContent: "center",
+                backgroundColor: "#fdfcf8", border: "1px solid #ede9e0",
+                fontSize: "18px", cursor: "pointer",
+                display: "flex", alignItems: "center", justifyContent: "center", color: "#3e4a37",
               }}>
               −
             </button>
-            <span style={{ fontSize: "16px", fontWeight: "600", color: "#222", minWidth: "40px", textAlign: "center" }}>
+            <span style={{ fontSize: "16px", fontWeight: "600", color: "#1f2a1a", minWidth: "40px", textAlign: "center" }}>
               {duration}분
             </span>
             <button
               onClick={() => setDuration((d) => Math.min(30, d + 1))}
               style={{
                 width: "32px", height: "32px", borderRadius: "50%",
-                backgroundColor: "#f2f2f2", border: "none", fontSize: "18px", cursor: "pointer",
-                display: "flex", alignItems: "center", justifyContent: "center",
+                backgroundColor: "#fdfcf8", border: "1px solid #ede9e0",
+                fontSize: "18px", cursor: "pointer",
+                display: "flex", alignItems: "center", justifyContent: "center", color: "#3e4a37",
               }}>
               +
             </button>
@@ -297,7 +307,7 @@ export default function CreateStory() {
 
         {/* 나레이션 목소리 */}
         <section style={{ marginBottom: "36px" }}>
-          <h2 style={{ fontSize: "16px", fontWeight: "600", color: "#222", marginBottom: "16px" }}>
+          <h2 style={{ fontSize: "15px", fontWeight: "600", color: "#1f2a1a", marginBottom: "16px" }}>
             나레이션 목소리
           </h2>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
@@ -306,8 +316,8 @@ export default function CreateStory() {
                 key={v.label}
                 onClick={() => setSelectedVoice(i)}
                 style={{
-                  backgroundColor: selectedVoice === i ? "#f0f8f3" : "#fff",
-                  border: selectedVoice === i ? "1.5px solid #7ab893" : "1.5px solid #eee",
+                  backgroundColor: selectedVoice === i ? "#eef5eb" : "#fff",
+                  border: selectedVoice === i ? "1.5px solid #5a8e4c" : "1.5px solid #ede9e0",
                   borderRadius: "14px",
                   padding: "20px 16px",
                   display: "flex",
@@ -316,16 +326,17 @@ export default function CreateStory() {
                   gap: "8px",
                   cursor: "pointer",
                   boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                  transition: "all 0.15s",
                 }}>
                 <div style={{
                   width: "48px", height: "48px", borderRadius: "50%",
-                  backgroundColor: selectedVoice === i ? "#7ab893" : "#f2f2f2",
+                  backgroundColor: selectedVoice === i ? "#5a8e4c" : "#f2f2f2",
                   display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px",
                 }}>
                   {v.icon}
                 </div>
-                <p style={{ fontSize: "14px", fontWeight: "500", color: "#222" }}>{v.label}</p>
-                <p style={{ fontSize: "12px", color: "#aaa" }}>{v.sub}</p>
+                <p style={{ fontSize: "14px", fontWeight: "500", color: "#1f2a1a", margin: 0 }}>{v.label}</p>
+                <p style={{ fontSize: "12px", color: "#6b7765", margin: 0 }}>{v.sub}</p>
               </div>
             ))}
           </div>
@@ -338,15 +349,15 @@ export default function CreateStory() {
         position: "fixed",
         bottom: 0, left: 0, right: 0,
         padding: "16px 24px 32px",
-        backgroundColor: "#f7f7f4",
-        borderTop: "0.5px solid #eee",
+        backgroundColor: "#fdfcf8",
+        borderTop: "1px solid #ede9e0",
       }}>
         <div style={{ maxWidth: "600px", margin: "0 auto" }}>
           <button
             onClick={handleSubmit}
             style={{
               width: "100%",
-              backgroundColor: "#5a9e75",
+              backgroundColor: "#5a8e4c",
               color: "#fff",
               border: "none",
               borderRadius: "50px",
@@ -354,7 +365,7 @@ export default function CreateStory() {
               fontSize: "16px",
               fontWeight: "600",
               cursor: "pointer",
-              boxShadow: "0 4px 16px rgba(90,158,117,0.3)",
+              boxShadow: "0 4px 16px rgba(90,142,76,0.30)",
             }}>
             동화 생성 시작하기
           </button>

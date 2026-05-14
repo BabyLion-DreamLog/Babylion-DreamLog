@@ -48,7 +48,9 @@ export default function Home() {
               오늘 아이의 하루를 동화로 만들어볼까요?
             </p>
           </div>
-          <button style={{
+          <button
+            onClick={() => router.push("/create")}
+            style={{
             backgroundColor: "#5a8e4c",
             color: "#fff",
             border: "none",
