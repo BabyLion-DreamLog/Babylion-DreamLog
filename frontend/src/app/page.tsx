@@ -2,8 +2,10 @@
 
 import Navbar from "@/components/Navbar";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
   const weekDays = ["월", "화", "수", "목", "금", "토"];
   const completedDays = [true, false, true, true, true, false];
   const [hoveredStory, setHoveredStory] = useState<number | null>(null);
@@ -42,18 +44,20 @@ export default function Home() {
               오늘 아이의 하루를 동화로 만들어볼까요?
             </p>
           </div>
-          <button style={{
-            backgroundColor: "#fff",
-            color: "#5a9e75",
-            border: "none",
-            borderRadius: "50px",
-            padding: "14px 32px",
-            fontSize: "15px",
-            fontWeight: "600",
-            cursor: "pointer",
-            boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
-            whiteSpace: "nowrap",
-          }}>
+          <button
+            onClick={() => router.push("/create")}
+            style={{
+              backgroundColor: "#fff",
+              color: "#5a9e75",
+              border: "none",
+              borderRadius: "50px",
+              padding: "14px 32px",
+              fontSize: "15px",
+              fontWeight: "600",
+              cursor: "pointer",
+              boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
+              whiteSpace: "nowrap",
+            }}>
             새 동화 만들기 →
           </button>
         </div>
@@ -111,7 +115,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* 하단 통계 2개 */}
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               <div style={{
                 backgroundColor: "#f7f7f4",
