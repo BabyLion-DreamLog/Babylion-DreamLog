@@ -1,19 +1,26 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useStoryStore } from "@/store/storyStore";
 
 export default function CreateStory() {
   const router = useRouter();
-  const [text, setText] = useState("");
-  const [selectedKids, setSelectedKids] = useState<number[]>([0, 1]);
+  const { place, name, activity, setInput } = useStoryStore();
+  const [selectedKids, setSelectedKids] = useState<number[]>([0]);
   const [duration, setDuration] = useState(8);
   const [selectedVoice, setSelectedVoice] = useState(0);
+  const [errors, setErrors] = useState({ place: false, name: false, activity: false });
 
   const kids = [
     { name: "지우", role: "우리 아이", emoji: "🐱" },
     { name: "서아", role: "누나", emoji: "🐱" },
     { name: "하준", role: "동생", emoji: "🐶" },
+  ];
+
+  const voices = [
+    { label: "엄마 목소리", sub: "2024.3 등록", icon: "🎙️" },
+    { label: "기본 목소리", sub: "따뜻한 여성", icon: "🎤" },
   ];
 
   const toggleKid = (i: number) => {
@@ -22,10 +29,27 @@ export default function CreateStory() {
     );
   };
 
-  const voices = [
-    { label: "엄마 목소리", sub: "2024.3 등록", icon: "🎙️" },
-    { label: "기본 목소리", sub: "따뜻한 여성", icon: "🎤" },
-  ];
+  const handleSubmit = () => {
+    const newErrors = {
+      place: !place.trim(),
+      name: !name.trim(),
+      activity: !activity.trim(),
+    };
+    setErrors(newErrors);
+    if (Object.values(newErrors).some(Boolean)) return;
+    router.push("/generate");
+  };
+
+  const inputStyle = {
+    width: "100%",
+    border: "none",
+    outline: "none",
+    fontSize: "14px",
+    color: "#333",
+    backgroundColor: "transparent",
+    fontFamily: "sans-serif",
+    boxSizing: "border-box" as const,
+  };
 
   return (
     <div style={{ backgroundColor: "#f7f7f4", minHeight: "100vh", fontFamily: "sans-serif" }}>
@@ -62,48 +86,75 @@ export default function CreateStory() {
           <h2 style={{ fontSize: "16px", fontWeight: "600", color: "#222", marginBottom: "6px" }}>
             오늘 아이의 하루는 어땠나요?
           </h2>
-          <p style={{ fontSize: "13px", color: "#aaa", marginBottom: "12px" }}>
-            키워드만 적어도 AI가 풍성한 이야기로 만들어드려요
+          <p style={{ fontSize: "13px", color: "#aaa", marginBottom: "16px" }}>
+            장소, 이름, 활동을 모두 입력해주세요
           </p>
+
           <div style={{
             backgroundColor: "#fff",
             borderRadius: "16px",
-            border: "1.5px solid #e8e8e8",
-            padding: "16px",
+            border: errors.place || errors.name || errors.activity ? "1.5px solid #e07a5f" : "1.5px solid #e8e8e8",
             boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
+            overflow: "hidden",
           }}>
-            <textarea
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              maxLength={200}
-              placeholder="예: 오늘 처음으로 노란 나비를 봤어요"
-              style={{
-                width: "100%",
-                minHeight: "90px",
-                border: "none",
-                outline: "none",
-                fontSize: "14px",
-                color: "#333",
-                resize: "none",
-                fontFamily: "sans-serif",
-                backgroundColor: "transparent",
-                boxSizing: "border-box",
-              }}
-            />
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "8px" }}>
-              <div style={{ display: "flex", gap: "8px" }}>
-                {["📷 사진 첨부", "🎵 음성 녹음"].map((btn) => (
-                  <button key={btn} style={{
-                    fontSize: "12px", color: "#888",
-                    backgroundColor: "#f5f5f5", border: "none",
-                    borderRadius: "20px", padding: "6px 12px", cursor: "pointer",
-                  }}>
-                    {btn}
-                  </button>
-                ))}
-              </div>
-              <span style={{ fontSize: "12px", color: "#bbb" }}>{text.length} / 200</span>
+
+            {/* 장소 */}
+            <div style={{ padding: "16px 20px", borderBottom: "1px solid #f0f0f0" }}>
+              <label style={{ fontSize: "12px", fontWeight: "600", color: "#5a9e75", display: "block", marginBottom: "6px" }}>
+                📍 장소
+              </label>
+              <input
+                value={place}
+                onChange={(e) => {
+                  setInput("place", e.target.value);
+                  setErrors((prev) => ({ ...prev, place: false }));
+                }}
+                placeholder="예: 유치원 운동장, 공원, 집"
+                style={inputStyle}
+              />
+              {errors.place && (
+                <p style={{ fontSize: "12px", color: "#e07a5f", marginTop: "4px" }}>장소를 입력해주세요</p>
+              )}
             </div>
+
+            {/* 이름 */}
+            <div style={{ padding: "16px 20px", borderBottom: "1px solid #f0f0f0" }}>
+              <label style={{ fontSize: "12px", fontWeight: "600", color: "#5a9e75", display: "block", marginBottom: "6px" }}>
+                👤 이름
+              </label>
+              <input
+                value={name}
+                onChange={(e) => {
+                  setInput("name", e.target.value);
+                  setErrors((prev) => ({ ...prev, name: false }));
+                }}
+                placeholder="예: 지우, 서아"
+                style={inputStyle}
+              />
+              {errors.name && (
+                <p style={{ fontSize: "12px", color: "#e07a5f", marginTop: "4px" }}>이름을 입력해주세요</p>
+              )}
+            </div>
+
+            {/* 활동 */}
+            <div style={{ padding: "16px 20px" }}>
+              <label style={{ fontSize: "12px", fontWeight: "600", color: "#5a9e75", display: "block", marginBottom: "6px" }}>
+                🌟 활동
+              </label>
+              <input
+                value={activity}
+                onChange={(e) => {
+                  setInput("activity", e.target.value);
+                  setErrors((prev) => ({ ...prev, activity: false }));
+                }}
+                placeholder="예: 나비를 처음 봤어요, 친구랑 모래놀이를 했어요"
+                style={inputStyle}
+              />
+              {errors.activity && (
+                <p style={{ fontSize: "12px", color: "#e07a5f", marginTop: "4px" }}>활동을 입력해주세요</p>
+              )}
+            </div>
+
           </div>
         </section>
 
@@ -118,6 +169,7 @@ export default function CreateStory() {
                 key={kid.name}
                 onClick={() => toggleKid(i)}
                 style={{
+                  backgroundColor: selectedKids.includes(i) ? "#f0f8f3" : "#fff",
                   border: selectedKids.includes(i) ? "1.5px solid #7ab893" : "1.5px solid #eee",
                   borderRadius: "14px",
                   padding: "14px 16px",
@@ -126,7 +178,6 @@ export default function CreateStory() {
                   justifyContent: "space-between",
                   cursor: "pointer",
                   boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
-                  backgroundColor: selectedKids.includes(i) ? "#f0f8f3" : "#fff",
                 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                   <div style={{
@@ -155,7 +206,6 @@ export default function CreateStory() {
               </div>
             ))}
 
-            {/* 가족 추가하기 */}
             <div style={{
               border: "1.5px dashed #ccc",
               borderRadius: "14px",
@@ -177,7 +227,21 @@ export default function CreateStory() {
             </div>
           </div>
 
-          {/* 함께 이야기 안내 */}
+          {/* 1명 선택 시 */}
+          {selectedKids.length === 1 && (
+            <div style={{
+              marginTop: "12px",
+              backgroundColor: "#f0f8f3",
+              borderRadius: "12px",
+              padding: "12px 16px",
+              fontSize: "13px",
+              color: "#5a9e75",
+            }}>
+              ✨ {kids[selectedKids[0]].name}가 주인공이 되는 이야기를 만들어드릴게요
+            </div>
+          )}
+
+          {/* 2명 이상 선택 시 */}
           {selectedKids.length >= 2 && (
             <div style={{
               marginTop: "12px",
@@ -197,12 +261,22 @@ export default function CreateStory() {
           <h2 style={{ fontSize: "16px", fontWeight: "600", color: "#222", marginBottom: "16px" }}>
             동화 길이 설정
           </h2>
-          <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+          <div style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "20px",
+            backgroundColor: "#fff",
+            borderRadius: "50px",
+            padding: "10px 24px",
+            boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+            border: "1px solid #eee",
+          }}>
             <button
               onClick={() => setDuration((d) => Math.max(1, d - 1))}
               style={{
-                width: "36px", height: "36px", borderRadius: "50%",
+                width: "32px", height: "32px", borderRadius: "50%",
                 backgroundColor: "#f2f2f2", border: "none", fontSize: "18px", cursor: "pointer",
+                display: "flex", alignItems: "center", justifyContent: "center",
               }}>
               −
             </button>
@@ -212,8 +286,9 @@ export default function CreateStory() {
             <button
               onClick={() => setDuration((d) => Math.min(30, d + 1))}
               style={{
-                width: "36px", height: "36px", borderRadius: "50%",
+                width: "32px", height: "32px", borderRadius: "50%",
                 backgroundColor: "#f2f2f2", border: "none", fontSize: "18px", cursor: "pointer",
+                display: "flex", alignItems: "center", justifyContent: "center",
               }}>
               +
             </button>
@@ -261,26 +336,26 @@ export default function CreateStory() {
       {/* 하단 고정 버튼 */}
       <div style={{
         position: "fixed",
-        bottom: 0,
-        left: 0,
-        right: 0,
+        bottom: 0, left: 0, right: 0,
         padding: "16px 24px 32px",
         backgroundColor: "#f7f7f4",
         borderTop: "0.5px solid #eee",
       }}>
         <div style={{ maxWidth: "600px", margin: "0 auto" }}>
-          <button style={{
-            width: "100%",
-            backgroundColor: "#5a9e75",
-            color: "#fff",
-            border: "none",
-            borderRadius: "50px",
-            padding: "16px",
-            fontSize: "16px",
-            fontWeight: "600",
-            cursor: "pointer",
-            boxShadow: "0 4px 16px rgba(90,158,117,0.3)",
-          }}>
+          <button
+            onClick={handleSubmit}
+            style={{
+              width: "100%",
+              backgroundColor: "#5a9e75",
+              color: "#fff",
+              border: "none",
+              borderRadius: "50px",
+              padding: "16px",
+              fontSize: "16px",
+              fontWeight: "600",
+              cursor: "pointer",
+              boxShadow: "0 4px 16px rgba(90,158,117,0.3)",
+            }}>
             동화 생성 시작하기
           </button>
         </div>
