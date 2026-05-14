@@ -38,7 +38,7 @@ export default function StoryPage() {
       try {
         setLoading(true);
         setError(false);
-        const res = await fetch("백엔드_API_주소/story", { // TODO: 백엔드 주소로 교체
+        const res = await fetch("http://localhost:8000/story/generate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ place, name, activity }),
