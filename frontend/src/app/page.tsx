@@ -2,11 +2,13 @@
 
 import Navbar from "@/components/Navbar";
 import { useState } from "react";
+
 import { Gowun_Batang } from "next/font/google";
 
 const gowunBatang = Gowun_Batang({ subsets: ["latin"], weight: "400" });
 
 export default function Home() {
+  const router = useRouter();
   const weekDays = ["월", "화", "수", "목", "금", "토"];
   const completedDays = [true, false, true, true, true, false];
   const [hoveredStory, setHoveredStory] = useState<number | null>(null);
@@ -114,7 +116,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* 하단 통계 2개 */}
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               <div style={{
                 backgroundColor: "#fdfcf8",
