@@ -11,7 +11,7 @@ const CREATE_STORY_FORM_ID = "create-story-form";
 
 export default function CreateStory() {
   const router = useRouter();
-  const { place, name, activity, setInput } = useStoryStore();
+  const { place, name, activity, setInput, setMeta } = useStoryStore();
   const [selectedKids, setSelectedKids] = useState<number[]>([0]);
   const [duration, setDuration] = useState(8);
   const [selectedVoice, setSelectedVoice] = useState(0);
@@ -55,6 +55,7 @@ export default function CreateStory() {
       });
       return;
     }
+    setMeta(duration, voices[selectedVoice].label);
     router.push("/story");
   };
 

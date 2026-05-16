@@ -2,10 +2,12 @@
 
 import Navbar from "@/components/Navbar";
 import { Gowun_Batang } from "next/font/google";
+import { useStoryStore } from "@/store/storyStore";
 
 const gowunBatang = Gowun_Batang({ subsets: ["latin"], weight: "400" });
 
 export default function ReportPage() {
+  const { name, duration, voice, storyTitle } = useStoryStore();
   const dateStr = new Date().toLocaleDateString("ko-KR", {
     year: "numeric", month: "long", day: "numeric", weekday: "long",
   });
@@ -28,17 +30,17 @@ export default function ReportPage() {
           alignItems: "flex-end",
         }}>
           <div>
-            <p style={{ fontSize: "13px", color: "#426b36", marginBottom: "14px", letterSpacing: "0.5px", fontWeight: "500" }}>
+            <p style={{ fontSize: "17px", color: "#426b36", marginBottom: "14px", letterSpacing: "0.5px", fontWeight: "500" }}>
               {dateStr}
             </p>
-            <p style={{ fontSize: "13px", color: "#6b7765", marginBottom: "10px" }}>
+            <p style={{ fontSize: "17px", color: "#6b7765", marginBottom: "10px" }}>
               오늘의 동화 리포트
             </p>
             <h1
               className={gowunBatang.className}
               style={{ fontSize: "30px", color: "#1f2a1a", lineHeight: "1.55", margin: 0 }}
             >
-              지우의 하루는<br />이런 동화가 되었어요
+              {name}의 하루는<br />이런 동화가 되었어요
             </h1>
           </div>
           <div style={{ textAlign: "right" }}>
@@ -48,9 +50,9 @@ export default function ReportPage() {
               color: "#6b7765",
               fontSize: "14px",
             }}>
-              <span>⏱ 8분</span>
+              <span>⏱ {duration}분</span>
               <span>💬 4번 대화</span>
-              <span>🎙 엄마 목소리</span>
+              <span>🎙 {voice}</span>
             </div>
           </div>
         </div>
@@ -70,13 +72,18 @@ export default function ReportPage() {
           }}>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <div style={{ width: "7px", height: "7px", borderRadius: "50%", backgroundColor: "#426b36" }} />
-              <span style={{ fontSize: "14px", color: "#426b36", fontWeight: "600" }}>오늘의 동화 요약</span>
+              <span style={{ fontSize: "16px", color: "#426b36", fontWeight: "600" }}>오늘의 동화 요약</span>
             </div>
 
+            {storyTitle && (
+              <p className={gowunBatang.className} style={{ fontSize: "24px", fontWeight: "700", color: "#1f2a1a", margin: "0 0 12px" }}>
+                {storyTitle}
+              </p>
+            )}
             <div style={{ borderLeft: "3px solid #426b36", paddingLeft: "18px" }}>
               <p
                 className={gowunBatang.className}
-                style={{ fontSize: "16px", color: "#3e4a37", lineHeight: "1.9", margin: 0 }}
+                style={{ fontSize: "18px", color: "#3e4a37", lineHeight: "1.9", margin: 0 }}
               >
                 유치원에서 만난 노란 나비를 따라<br />
                 지우가 꽃밭으로 떠난 작은 모험
@@ -92,21 +99,21 @@ export default function ReportPage() {
               gap: "10px",
               border: "1px solid #ede9e0",
             }}>
-              <p style={{ fontSize: "12px", color: "#6b7765", fontWeight: "500", margin: 0 }}>이야기 정보</p>
+              <p style={{ fontSize: "14px", color: "#6b7765", fontWeight: "500", margin: 0 }}>이야기 정보</p>
               <div style={{ display: "flex", gap: "20px" }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                  <span style={{ fontSize: "11px", color: "#6b7765" }}>소요 시간</span>
-                  <span style={{ fontSize: "13px", color: "#3e4a37", fontWeight: "500" }}>⏱ 8분</span>
+                  <span style={{ fontSize: "13px", color: "#6b7765" }}>소요 시간</span>
+                  <span style={{ fontSize: "15px", color: "#3e4a37", fontWeight: "500" }}>⏱ {duration}분</span>
                 </div>
                 <div style={{ width: "1px", backgroundColor: "#ede9e0" }} />
                 <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                  <span style={{ fontSize: "11px", color: "#6b7765" }}>대화 수</span>
-                  <span style={{ fontSize: "13px", color: "#3e4a37", fontWeight: "500" }}>💬 4번</span>
+                  <span style={{ fontSize: "13px", color: "#6b7765" }}>대화 수</span>
+                  <span style={{ fontSize: "15px", color: "#3e4a37", fontWeight: "500" }}>💬 4번</span>
                 </div>
                 <div style={{ width: "1px", backgroundColor: "#ede9e0" }} />
                 <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                  <span style={{ fontSize: "11px", color: "#6b7765" }}>읽어준 사람</span>
-                  <span style={{ fontSize: "13px", color: "#3e4a37", fontWeight: "500" }}>🎙 엄마 목소리</span>
+                  <span style={{ fontSize: "13px", color: "#6b7765" }}>읽어준 사람</span>
+                  <span style={{ fontSize: "15px", color: "#3e4a37", fontWeight: "500" }}>🎙 {voice}</span>
                 </div>
               </div>
             </div>
