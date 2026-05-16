@@ -120,12 +120,12 @@ export default function StoryPage() {
       <>
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap');
-          @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
+          @keyframes grow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
           }
           .loading-emoji {
-            animation: pulse 1.8s ease-in-out infinite;
+            animation: grow 2s ease-in-out infinite;
           }
           .loading-message {
             transition: opacity 0.4s ease;
