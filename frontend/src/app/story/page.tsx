@@ -268,9 +268,9 @@ export default function StoryPage() {
                           color: isActive ? "#fff" : isDone ? "#5a8a6a" : "#b0a899",
                           cursor: "pointer", transition: "all 0.25s", flexShrink: 0,
                         }}
-                        aria-label={`${s.label} 단계`}
+                        aria-label={`${i + 1} 단계`}
                       >
-                        {s.label}
+                        {i + 1}
                       </button>
                       {i < totalStages - 1 && (
                         <div style={{
@@ -308,7 +308,7 @@ export default function StoryPage() {
                   letterSpacing: "0.08em", background: "#eef5f0",
                   padding: "4px 12px", borderRadius: 20, width: "fit-content",
                 }}>
-                  ✦ {currentStage.label}
+                  ✦ {currentIndex + 1}/{totalStages}
                 </span>
                 <p style={{
                   fontFamily: "'Gowun Batang', serif",
