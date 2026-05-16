@@ -6,6 +6,10 @@ import { Gowun_Batang } from "next/font/google";
 const gowunBatang = Gowun_Batang({ subsets: ["latin"], weight: "400" });
 
 export default function ReportPage() {
+  const dateStr = new Date().toLocaleDateString("ko-KR", {
+    year: "numeric", month: "long", day: "numeric", weekday: "long",
+  });
+
   return (
     <div style={{ backgroundColor: "#fdfcf8", minHeight: "100vh", fontFamily: "sans-serif" }}>
       <Navbar />
@@ -25,7 +29,7 @@ export default function ReportPage() {
         }}>
           <div>
             <p style={{ fontSize: "13px", color: "#426b36", marginBottom: "14px", letterSpacing: "0.5px", fontWeight: "500" }}>
-              2026. 5. 10. 일요일
+              {dateStr}
             </p>
             <p style={{ fontSize: "13px", color: "#6b7765", marginBottom: "10px" }}>
               오늘의 동화 리포트

@@ -10,6 +10,9 @@ const gowunBatang = Gowun_Batang({ subsets: ["latin"], weight: "400" });
 
 export default function Home() {
   const router = useRouter();
+  const dateStr = new Date().toLocaleDateString("ko-KR", {
+    year: "numeric", month: "long", day: "numeric", weekday: "long",
+  });
   const weekDays = ["월", "화", "수", "목", "금", "토"];
   const completedDays = [true, false, true, true, true, false];
   const [hoveredStory, setHoveredStory] = useState<number | null>(null);
@@ -39,7 +42,7 @@ export default function Home() {
         }}>
           <div>
             <p style={{ fontSize: "13px", color: "#426b36", marginBottom: "10px", letterSpacing: "0.5px", fontWeight: "500" }}>
-              2026. 5. 10. 일요일
+              {dateStr}
             </p>
             <h1 className={gowunBatang.className} style={{ fontSize: "30px", color: "#1f2a1a", lineHeight: "1.55", marginBottom: "6px" }}>
               안녕하세요,<br />지우 부모님
