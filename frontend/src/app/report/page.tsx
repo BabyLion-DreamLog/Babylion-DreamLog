@@ -7,6 +7,14 @@ import { useStoryStore } from "@/store/storyStore";
 
 const gowunBatang = Gowun_Batang({ subsets: ["latin"], weight: "400" });
 
+function darken(hex: string, factor: number): string {
+  const n = parseInt(hex.replace("#", ""), 16);
+  const r = Math.floor(((n >> 16) & 0xff) * factor);
+  const g = Math.floor(((n >> 8) & 0xff) * factor);
+  const b = Math.floor((n & 0xff) * factor);
+  return `rgb(${r},${g},${b})`;
+}
+
 function hasBatchim(name: string): boolean {
   const code = name.charCodeAt(name.length - 1);
   return (code - 0xAC00) % 28 !== 0;
@@ -180,17 +188,17 @@ export default function ReportPage() {
                   <div style={{
                     display: "inline-flex",
                     alignItems: "center",
-                    backgroundColor: "#fdf5ef",
+                    backgroundColor: homeActivity?.color ? `${homeActivity.color}33` : "#fdf5ef",
                     borderRadius: "20px",
                     padding: "4px 12px",
                     marginBottom: "12px",
                   }}>
-                    <span style={{ fontSize: "12px", color: "#e89b7a", fontWeight: "500" }}>🎨 가정 활동 추천</span>
+                    <span style={{ fontSize: "14px", color: homeActivity?.color ? darken(homeActivity.color, 0.7) : "#e89b7a", fontWeight: "500" }}>🎨 가정 활동 추천</span>
                   </div>
-                  <h3 style={{ fontSize: "17px", fontWeight: "600", color: "#000", margin: "0 0 5px" }}>
+                  <h3 style={{ fontSize: "18px", fontWeight: "600", color: "#000", margin: "0 0 5px" }}>
                     {homeActivity?.title ?? "나비에게 그림 편지 보내기"}
                   </h3>
-                  <p style={{ fontSize: "12px", color: "#999", margin: 0 }}>
+                  <p style={{ fontSize: "13px", color: "#999", margin: 0 }}>
                     {homeActivity?.description ?? "관찰력과 표현력을 함께 기르는 활동"}
                   </p>
                 </div>
@@ -202,7 +210,7 @@ export default function ReportPage() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontSize: "28px",
+                  fontSize: "30px",
                   flexShrink: 0,
                 }}>
                   {homeActivity?.emoji ?? "🦋"}
@@ -210,15 +218,15 @@ export default function ReportPage() {
               </div>
 
               <div style={{
-                backgroundColor: "#fdfcf8",
+                backgroundColor: homeActivity?.color ? `${homeActivity.color}1A` : "#fdfcf8",
                 borderRadius: "12px",
                 padding: "16px 18px",
-                border: "1px solid #ede9e0",
+                border: `1px solid ${homeActivity?.color ? `${homeActivity.color}44` : "#ede9e0"}`,
               }}>
-                <p style={{ fontSize: "12px", color: "#ec7d4e", fontWeight: "600", margin: "0 0 6px" }}>
+                <p style={{ fontSize: "14px", color: homeActivity?.color ? darken(homeActivity.color, 0.5) : "#ec7d4e", fontWeight: "600", margin: "0 0 6px" }}>
                   이렇게 시작해보세요
                 </p>
-                <p style={{ fontSize: "13px", color: "#1f2a1a", lineHeight: "1.7", margin: 0 }}>
+                <p style={{ fontSize: "15px", color: "#1f2a1a", lineHeight: "1.7", margin: 0 }}>
                   {homeActivity?.tip ?? "오늘 만난 나비한테 그림 그려줄까? 어떤 꽃을 좋아할 것 같아?"}
                 </p>
               </div>
@@ -233,11 +241,11 @@ export default function ReportPage() {
                 padding: "24px 22px",
                 boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
               }}>
-                <div style={{ fontSize: "22px", marginBottom: "12px" }}>💬</div>
-                <p style={{ fontSize: "12px", color: "#426b36", fontWeight: "600", margin: "0 0 10px" }}>
+                <div style={{ fontSize: "26px", marginBottom: "12px" }}>💬</div>
+                <p style={{ fontSize: "15px", color: "#426b36", fontWeight: "600", margin: "0 0 10px" }}>
                   오늘의 추천 대화
                 </p>
-                <p style={{ fontSize: "12px", color: "#1f2a1a", lineHeight: "1.7", margin: 0 }}>
+                <p style={{ fontSize: "15px", color: "#1f2a1a", lineHeight: "1.7", margin: 0 }}>
                   {dialogue}
                 </p>
               </div>
@@ -248,11 +256,11 @@ export default function ReportPage() {
                 padding: "24px 22px",
                 boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
               }}>
-                <div style={{ fontSize: "22px", marginBottom: "12px" }}>🌿</div>
-                <p style={{ fontSize: "12px", color: "#426b36", fontWeight: "600", margin: "0 0 10px" }}>
+                <div style={{ fontSize: "26px", marginBottom: "12px" }}>🌿</div>
+                <p style={{ fontSize: "15px", color: "#426b36", fontWeight: "600", margin: "0 0 10px" }}>
                   이번 주말 활동 추천
                 </p>
-                <p style={{ fontSize: "12px", color: "#1f2a1a", lineHeight: "1.7", margin: 0 }}>
+                <p style={{ fontSize: "15px", color: "#1f2a1a", lineHeight: "1.7", margin: 0 }}>
                   {weekendActivity}
                 </p>
               </div>
