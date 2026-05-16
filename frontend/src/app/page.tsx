@@ -132,7 +132,7 @@ export default function Home() {
                 <span style={{ fontSize: "13px", color: "#6b7765" }}>
                   이번 달 총 <strong style={{ color: "#1f2a1a", fontWeight: "600" }}>18</strong>개 수집
                 </span>
-                <span style={{ fontSize: "12px", color: "#426b36", fontWeight: "500", cursor: "pointer" }}>전체 기록 →</span>
+                <span onClick={() => router.push("/bookcase")} style={{ fontSize: "12px", color: "#426b36", fontWeight: "500", cursor: "pointer" }}>전체 기록 →</span>
               </div>
               <div style={{
                 backgroundColor: "#eef5eb",
