@@ -159,7 +159,7 @@ export default function Home() {
           }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
               <span style={{ fontSize: "15px", fontWeight: "600", color: "#1f2a1a" }}>최근 동화</span>
-              <span style={{ fontSize: "12px", color: "#426b36", fontWeight: "500", cursor: "pointer" }}>전체보기 →</span>
+              <span onClick={() => router.push("/bookcase")} style={{ fontSize: "12px", color: "#426b36", fontWeight: "500", cursor: "pointer" }}>전체보기 →</span>
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
