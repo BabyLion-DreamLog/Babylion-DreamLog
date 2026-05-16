@@ -31,6 +31,23 @@ export default function StoryPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
   const [animating, setAnimating] = useState(false);
+  const [loadingIndex, setLoadingIndex] = useState(0);
+
+  const hasBatchim = (n: string) => (n.charCodeAt(n.length - 1) - 0xAC00) % 28 !== 0;
+  const nameWithParticle = name ? `${name}${hasBatchim(name) ? "이의" : "의"}` : "OO의";
+
+  const loadingSteps = [
+    { emoji: "🌱", message: `${nameWithParticle} 동화를 만들고 있어요 ✦` },
+    { emoji: "📖", message: "이야기를 엮고 있어요 ✦" },
+  ];
+
+  useEffect(() => {
+    if (!loading) return;
+    const timer = setInterval(() => {
+      setLoadingIndex((i) => (i + 1) % loadingSteps.length);
+    }, 2000);
+    return () => clearInterval(timer);
+  }, [loading]);
 
   // ── API 호출 ──
   useEffect(() => {
@@ -105,6 +122,12 @@ export default function StoryPage() {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.4; }
           }
+          .loading-emoji {
+            animation: pulse 1.8s ease-in-out infinite;
+          }
+          .loading-message {
+            transition: opacity 0.4s ease;
+          }
         `}</style>
         <div style={{
           minHeight: "100vh",
@@ -113,13 +136,15 @@ export default function StoryPage() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          gap: 16,
+          gap: 20,
         }}>
-          <span style={{ fontSize: 48, animation: "pulse 1.8s ease-in-out infinite" }}>🌱</span>
-          <p style={{ fontFamily: "'Gowun Batang', serif", fontSize: 18, color: "#4a7c59" }}>
-            동화를 만들고 있어요...
+          <span className="loading-emoji" style={{ fontSize: 56 }}>
+            {loadingSteps[loadingIndex].emoji}
+          </span>
+          <p className="loading-message" style={{ fontFamily: "'Gowun Batang', serif", fontSize: 18, color: "#4a7c59", margin: 0 }}>
+            {loadingSteps[loadingIndex].message}
           </p>
-          <p style={{ fontSize: 13, color: "#a89e8e" }}>잠시만 기다려주세요</p>
+          <p style={{ fontSize: 13, color: "#a89e8e", margin: 0 }}>잠시만 기다려주세요</p>
         </div>
       </>
     );
