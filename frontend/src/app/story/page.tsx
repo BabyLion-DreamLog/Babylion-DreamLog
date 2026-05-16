@@ -23,7 +23,7 @@ interface Story {
 // ─────────────────────────────────────────
 export default function StoryPage() {
   const router = useRouter();
-  const { place, name, activity, setStoryTitle, setStorySummary, setHomeActivity } = useStoryStore();
+  const { place, name, activity, homeActivity, setStoryTitle, setStorySummary, setHomeActivity } = useStoryStore();
 
   const [story, setStory] = useState<Story | null>(null);
   const [loading, setLoading] = useState(true);
@@ -269,7 +269,7 @@ export default function StoryPage() {
               <h1 style={{
                 fontFamily: "'Gowun Batang', serif",
                 fontSize: 26, fontWeight: 700, color: "#2e2a22", lineHeight: 1.4,
-                borderLeft: "3px solid #4a7c59", paddingLeft: 14, margin: 0,
+                borderLeft: `3px solid ${homeActivity?.color ?? "#4a7c59"}`, paddingLeft: 14, margin: 0,
               }}>
                 {story.title}
               </h1>
@@ -362,20 +362,40 @@ export default function StoryPage() {
                 alignItems: "center", gap: 12,
                 padding: "32px 0 8px", textAlign: "center",
               }}>
-                <span style={{ fontSize: 48 }} role="img" aria-label="꽃">🌸</span>
-                <h2 style={{ fontFamily: "'Gowun Batang', serif", fontSize: 22, color: "#2e2a22", marginTop: 4 }}>
-                  동화가 끝났어요
-                </h2>
-                <p style={{ fontSize: 13, color: "#a89e8e", lineHeight: 1.8 }}>
-                  오늘 {name}의 하루가<br />소중한 동화 한 편이 되었어요.
-                </p>
+                <div style={{
+                  width: "100%",
+                  background: homeActivity?.color ? `${homeActivity.color}22` : "#eef5f0",
+                  borderRadius: 20,
+                  border: `1px solid ${homeActivity?.color ? `${homeActivity.color}44` : "#d4e8da"}`,
+                  padding: "32px 24px 28px",
+                  position: "relative",
+                  overflow: "hidden",
+                  display: "flex", flexDirection: "column", alignItems: "center", gap: 12,
+                }}>
+                  <div style={{
+                    position: "absolute", top: 0, left: 0, right: 0,
+                    height: 3,
+                    background: homeActivity?.color ?? "#4a7c59",
+                    borderRadius: "20px 20px 0 0",
+                  }} />
+                  <span style={{ fontSize: 64 }} role="img" aria-label="꽃">{homeActivity?.emoji ?? "🌸"}</span>
+                  <h2 style={{ fontFamily: "'Gowun Batang', serif", fontSize: 24, color: "#2e2a22", margin: 0 }}>
+                    동화가 끝났어요
+                  </h2>
+                  <p style={{ fontSize: 15, color: "#a89e8e", lineHeight: 1.8, margin: 0 }}>
+                    오늘 {nameWithParticle} 하루가<br />소중한 동화 한 편이 되었어요.
+                  </p>
+                  <p style={{ fontSize: 13, color: "#8a8070", margin: "8px 0 0" }}>
+                    리포트에서 오늘의 추천 활동을 확인해보세요 ✦
+                  </p>
+                </div>
                 <div style={{ display: "flex", gap: 10, marginTop: 16, width: "100%" }}>
                   <button
                     onClick={handleRestart}
                     style={{
                       flex: 1, height: 48, borderRadius: 24,
                       border: "1.5px solid #d4cfc4", background: "#fff",
-                      fontSize: 14, color: "#6b6457", cursor: "pointer",
+                      fontSize: 16, color: "#6b6457", cursor: "pointer",
                       fontFamily: "'Noto Sans KR', sans-serif",
                     }}
                   >
@@ -383,7 +403,8 @@ export default function StoryPage() {
                   </button>
                   <Link href="/report" style={{
                     flex: 1, height: 48, borderRadius: 24,
-                    background: "#4a7c59", color: "#fff", fontSize: 14,
+                    background: homeActivity?.color ?? "#4a7c59", color: "#000", fontSize: 16,
+                    border: "1.5px solid #000",
                     display: "flex", alignItems: "center", justifyContent: "center",
                     textDecoration: "none", fontFamily: "'Noto Sans KR', sans-serif",
                   }}>
