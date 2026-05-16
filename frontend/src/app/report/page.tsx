@@ -53,19 +53,24 @@ const weekendActivities = [
 ];
 
 export default function ReportPage() {
-  const { name, duration, voice, storyTitle, storySummary, homeActivity } = useStoryStore();
+  const { name, duration, voice, storyTitle, storySummary, homeActivity, dialogue: storedDialogue, weekendActivity: storedWeekendActivity, setDialogue: saveDialogue, setWeekendActivity: saveWeekendActivity } = useStoryStore();
   const dateStr = new Date().toLocaleDateString("ko-KR", {
     year: "numeric", month: "long", day: "numeric", weekday: "long",
   });
 
-  const [dialogue, setDialogue] = useState("");
-  const [weekendActivity, setWeekendActivity] = useState("");
+  const [dialogue, setDialogue] = useState(storedDialogue);
+  const [weekendActivity, setWeekendActivity] = useState(storedWeekendActivity);
 
   useEffect(() => {
+    if (storedDialogue && storedWeekendActivity) return;
     const list = getDialogues(name || "OO");
-    setDialogue(list[Math.floor(Math.random() * list.length)]);
-    setWeekendActivity(weekendActivities[Math.floor(Math.random() * weekendActivities.length)]);
-  }, [name]);
+    const picked = list[Math.floor(Math.random() * list.length)];
+    const pickedWeekend = weekendActivities[Math.floor(Math.random() * weekendActivities.length)];
+    setDialogue(picked);
+    setWeekendActivity(pickedWeekend);
+    saveDialogue(picked);
+    saveWeekendActivity(pickedWeekend);
+  }, []);
 
   return (
     <div style={{ backgroundColor: "#fdfcf8", minHeight: "100vh", fontFamily: "sans-serif" }}>

@@ -23,7 +23,7 @@ interface Story {
 // ─────────────────────────────────────────
 export default function StoryPage() {
   const router = useRouter();
-  const { place, name, activity, homeActivity, setStoryTitle, setStorySummary, setHomeActivity } = useStoryStore();
+  const { place, name, activity, homeActivity, setStoryTitle, setStorySummary, setHomeActivity, setDialogue, setWeekendActivity } = useStoryStore();
 
   const [story, setStory] = useState<Story | null>(null);
   const [loading, setLoading] = useState(true);
@@ -55,6 +55,8 @@ export default function StoryPage() {
       try {
         setLoading(true);
         setError(false);
+        setDialogue("");
+        setWeekendActivity("");
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/story/generate`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
