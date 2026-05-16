@@ -4,18 +4,23 @@ import Navbar from "@/components/Navbar";
 import { useState } from "react";
 
 const books = [
-  { id: 1, title: "나비의 하루", date: "2026.05.12", cover: "linear-gradient(145deg, #f4a642, #e8733a)", starred: true },
-  { id: 2, title: "당근밭의 여우", date: "2026.05.09", cover: "linear-gradient(145deg, #e07848, #c95f35)", starred: true },
-  { id: 3, title: "달빛 산책", date: "2026.05.07", cover: "linear-gradient(145deg, #7b8ec8, #4d629e)", starred: false },
-  { id: 4, title: "작은 꽃잎", date: "2026.05.05", cover: "linear-gradient(145deg, #e8829a, #c95e7a)", starred: false },
-  { id: 5, title: "밤의 약속", date: "2026.05.03", cover: "linear-gradient(145deg, #4a6f9e, #2d4f7e)", starred: false },
-  { id: 6, title: "초록 비밀", date: "2026.05.01", cover: "linear-gradient(145deg, #5a8e5c, #3a6e40)", starred: false },
-  { id: 7, title: "귀뚜라미", date: "2026.04.28", cover: "linear-gradient(145deg, #b87c4a, #8a5c30)", starred: false },
-  { id: 8, title: "바닷속 친구들", date: "2026.04.25", cover: "linear-gradient(145deg, #4a9db5, #2d7a99)", starred: true },
-  { id: 9, title: "사진이 좋아", date: "2026.04.22", cover: "linear-gradient(145deg, #9a82c8, #7060a8)", starred: false },
-  { id: 10, title: "찌르르르 찌르르르", date: "2026.04.18", cover: "linear-gradient(145deg, #e89a5c, #c87838)", starred: false },
-  { id: 11, title: "여름의 꿈", date: "2026.04.14", cover: "linear-gradient(145deg, #7ab56a, #5a9a4c)", starred: false },
-  { id: 12, title: "하얀 거짓말", date: "2026.04.10", cover: "linear-gradient(145deg, #9aabb8, #7a8fa0)", starred: false },
+  { id: 1, title: "하늘을 나는 오리", date: "2026.05.17", cover: "/covers/하늘을 나는 오리.png", starred: false },
+  { id: 2, title: "편지를 쓰자", date: "2026.05.15", cover: "/covers/편지를 쓰자.png", starred: false },
+  { id: 3, title: "곰인형과 나", date: "2026.05.13", cover: "/covers/곰인형과 나.png", starred: false },
+  { id: 4, title: "나비의 하루", date: "2026.05.12", cover: "/covers/나비의 하루.png", starred: true },
+  { id: 5, title: "당근밭의 여우", date: "2026.05.09", cover: "/covers/당근밭의 여우.png", starred: true },
+  { id: 6, title: "달빛 산책", date: "2026.05.07", cover: "/covers/달빛 산책.png", starred: false },
+  { id: 7, title: "작은 꽃잎", date: "2026.05.05", cover: "/covers/작은 꽃잎.png", starred: false },
+  { id: 8, title: "밤의 약속", date: "2026.05.03", cover: "/covers/밤의 약속.png", starred: false },
+  { id: 9, title: "초록 비밀", date: "2026.05.01", cover: "/covers/초록 비밀.png", starred: false },
+  { id: 10, title: "귀뚜라미", date: "2026.04.29", cover: "/covers/귀뚜라미.png", starred: false },
+  { id: 11, title: "바닷속 친구들", date: "2026.04.25", cover: "/covers/바닷속 친구들.png", starred: true },
+  { id: 12, title: "사진이 좋아", date: "2026.04.22", cover: "/covers/사진이 좋아.png", starred: false },
+  { id: 13, title: "생일파티야", date: "2026.04.20", cover: "/covers/생일파티야.png", starred: false },
+  { id: 14, title: "찌르르르 찌르르르", date: "2026.04.18", cover: "/covers/찌르르르찌르르르.png", starred: false },
+  { id: 15, title: "여름의 꿈", date: "2026.04.14", cover: "/covers/여름의 꿈.png", starred: false },
+  { id: 16, title: "하얀 거짓말", date: "2026.04.10", cover: "/covers/하얀 거짓말.png", starred: false },
+  { id: 17, title: "별을 받은 날", date: "2026.04.08", cover: "/covers/별을 받은 날.png", starred: false },
 ];
 
 export default function BookcasePage() {
@@ -199,12 +204,10 @@ function BookCard({
     <div
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      style={{ cursor: "pointer" }}
+      style={{ cursor: "pointer", position: "relative" }}
     >
       {/* 표지 */}
       <div style={{
-        position: "relative",
-        background: book.cover,
         borderRadius: "10px",
         aspectRatio: "3/4",
         marginBottom: "10px",
@@ -213,46 +216,42 @@ function BookCard({
           : "0 4px 12px rgba(0,0,0,0.10)",
         transform: hovered ? "translateY(-3px)" : "none",
         transition: "all 0.2s ease",
-        display: "flex",
-        alignItems: "flex-end",
-        padding: "12px",
+        overflow: "hidden",
       }}>
-        {/* 책 제목 (표지 하단) */}
-        <span style={{
-          fontSize: "11px",
-          fontWeight: "600",
-          color: "#fff",
-          lineHeight: "1.4",
-          textShadow: "0 1px 4px rgba(0,0,0,0.3)",
-        }}>
-          {book.title}
-        </span>
-
-        {/* 즐겨찾기 버튼 */}
-        <button
-          onClick={(e) => { e.stopPropagation(); setStarred(!starred); }}
-          style={{
-            position: "absolute",
-            top: "8px",
-            right: "8px",
-            width: "26px",
-            height: "26px",
-            borderRadius: "50%",
-            backgroundColor: "#fff",
-            border: "none",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "12px",
-            boxShadow: "0 2px 6px rgba(0,0,0,0.12)",
-          }}
-        >
-          {starred ? "⭐" : "☆"}
-        </button>
+        <img
+          src={book.cover}
+          alt={book.title}
+          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+        />
       </div>
 
-      {/* 날짜 */}
+      {/* 즐겨찾기 버튼 */}
+      <button
+        onClick={(e) => { e.stopPropagation(); setStarred(!starred); }}
+        style={{
+          position: "absolute",
+          top: "8px",
+          right: "8px",
+          width: "26px",
+          height: "26px",
+          borderRadius: "50%",
+          backgroundColor: "#fff",
+          border: "none",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "12px",
+          boxShadow: "0 2px 6px rgba(0,0,0,0.12)",
+        }}
+      >
+        {starred ? "⭐" : "☆"}
+      </button>
+
+      {/* 제목 + 날짜 */}
+      <p style={{ fontSize: "15px", fontWeight: "600", color: "#1f2a1a", margin: "0 0 2px", textAlign: "center" }}>
+        {book.title}
+      </p>
       <p style={{ fontSize: "11px", color: "#898989", margin: 0, textAlign: "center" }}>
         {book.date}
       </p>
