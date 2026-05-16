@@ -263,13 +263,13 @@ export default function StoryPage() {
 
             {/* ── 헤더: 날짜 + 제목 ── */}
             <header style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              <span style={{ fontSize: 14, color: "#a89e8e", letterSpacing: "0.04em" }}>
+              <span style={{ fontSize: 16, color: "#a89e8e", letterSpacing: "0.04em" }}>
                 {dateStr}
               </span>
               <h1 style={{
                 fontFamily: "'Gowun Batang', serif",
-                fontSize: 26, fontWeight: 700, color: "#2e2a22", lineHeight: 1.4,
-                borderLeft: `3px solid ${homeActivity?.color ?? "#4a7c59"}`, paddingLeft: 14, margin: 0,
+                fontSize: 28, fontWeight: 700, color: "#2e2a22", lineHeight: 1.4,
+                borderLeft: "3px solid #4a7c59", paddingLeft: 14, margin: 0,
               }}>
                 {story.title}
               </h1>
@@ -403,8 +403,8 @@ export default function StoryPage() {
                   </button>
                   <Link href="/report" style={{
                     flex: 1, height: 48, borderRadius: 24,
-                    background: homeActivity?.color ?? "#4a7c59", color: "#000", fontSize: 16,
-                    border: "1.5px solid #000",
+                    background: homeActivity?.color ?? "#4a7c59", color: "#3a3530", fontSize: 16,
+                    border: "1px solid #b0a899",
                     display: "flex", alignItems: "center", justifyContent: "center",
                     textDecoration: "none", fontFamily: "'Noto Sans KR', sans-serif",
                   }}>
@@ -436,9 +436,10 @@ export default function StoryPage() {
                 <button
                   onClick={goNext}
                   style={{
-                    flex: 1, height: 52, borderRadius: 26, border: "none",
-                    background: isLastStage ? "#c5a97a" : "#4a7c59",
-                    color: "#fff", fontSize: 15, cursor: "pointer",
+                    flex: 1, height: 52, borderRadius: 26,
+                    border: isLastStage ? "1px solid #b0a899" : "none",
+                    background: isLastStage ? (homeActivity?.color ?? "#c5a97a") : "#4a7c59",
+                    color: isLastStage ? "#3a3530" : "#fff", fontSize: 15, cursor: "pointer",
                     transition: "background 0.25s",
                     fontFamily: "'Noto Sans KR', sans-serif",
                     letterSpacing: "0.02em",
