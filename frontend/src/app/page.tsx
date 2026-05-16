@@ -41,13 +41,13 @@ export default function Home() {
           boxShadow: "0 4px 20px rgba(66,107,54,0.10)",
         }}>
           <div>
-            <p style={{ fontSize: "13px", color: "#426b36", marginBottom: "10px", letterSpacing: "0.5px", fontWeight: "500" }}>
+            <p style={{ fontSize: "15px", color: "#426b36", marginBottom: "10px", letterSpacing: "0.5px", fontWeight: "500" }}>
               {dateStr}
             </p>
-            <h1 className={gowunBatang.className} style={{ fontSize: "30px", color: "#1f2a1a", lineHeight: "1.55", marginBottom: "6px" }}>
+            <h1 className={gowunBatang.className} style={{ fontSize: "32px", color: "#1f2a1a", lineHeight: "1.55", marginBottom: "6px" }}>
               안녕하세요,<br />지우 부모님
             </h1>
-            <p style={{ fontSize: "14px", color: "#6b7765", marginTop: "12px" }}>
+            <p style={{ fontSize: "16px", color: "#6b7765", marginTop: "12px" }}>
               오늘 아이의 하루를 동화로 만들어볼까요?
             </p>
           </div>
@@ -59,7 +59,7 @@ export default function Home() {
             border: "none",
             borderRadius: "50px",
             padding: "14px 32px",
-            fontSize: "15px",
+            fontSize: "17px",
             fontWeight: "600",
             cursor: "pointer",
             boxShadow: "0 4px 16px rgba(90,142,76,0.30)",
@@ -84,9 +84,9 @@ export default function Home() {
           }}>
             <div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
-                <span style={{ fontSize: "15px", fontWeight: "600", color: "#1f2a1a" }}>이번 주 동화 기록</span>
+                <span style={{ fontSize: "17px", fontWeight: "600", color: "#1f2a1a" }}>이번 주 동화 기록</span>
                 <span style={{
-                  fontSize: "11px",
+                  fontSize: "13px",
                   backgroundColor: "#fff0ec",
                   color: "#ec7d4e",
                   padding: "4px 12px",
@@ -116,7 +116,7 @@ export default function Home() {
                         </svg>
                       )}
                     </div>
-                    <span style={{ fontSize: "11px", color: "#6b7765" }}>{day}</span>
+                    <span style={{ fontSize: "13px", color: "#6b7765" }}>{day}</span>
                   </div>
                 ))}
               </div>
@@ -132,10 +132,10 @@ export default function Home() {
                 alignItems: "center",
                 border: "1px solid #ede9e0",
               }}>
-                <span style={{ fontSize: "13px", color: "#6b7765" }}>
+                <span style={{ fontSize: "15px", color: "#6b7765" }}>
                   이번 달 총 <strong style={{ color: "#1f2a1a", fontWeight: "600" }}>18</strong>개 수집
                 </span>
-                <span onClick={() => router.push("/bookcase")} style={{ fontSize: "12px", color: "#426b36", fontWeight: "500", cursor: "pointer" }}>전체 기록 →</span>
+                <span onClick={() => router.push("/bookcase")} style={{ fontSize: "14px", color: "#426b36", fontWeight: "500", cursor: "pointer" }}>전체 기록 →</span>
               </div>
               <div style={{
                 backgroundColor: "#eef5eb",
@@ -145,10 +145,10 @@ export default function Home() {
                 justifyContent: "space-between",
                 alignItems: "center",
               }}>
-                <span style={{ fontSize: "13px", color: "#6b7765" }}>
+                <span style={{ fontSize: "15px", color: "#6b7765" }}>
                   이번 주 <strong style={{ color: "#1f2a1a", fontWeight: "600" }}>4</strong>개 완성
                 </span>
-                <span style={{ fontSize: "12px", color: "#426b36", fontWeight: "500" }}>목표 6개</span>
+                <span style={{ fontSize: "14px", color: "#426b36", fontWeight: "500" }}>목표 6개</span>
               </div>
             </div>
           </div>
@@ -161,8 +161,8 @@ export default function Home() {
             boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
           }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
-              <span style={{ fontSize: "15px", fontWeight: "600", color: "#1f2a1a" }}>최근 동화</span>
-              <span onClick={() => router.push("/bookcase")} style={{ fontSize: "12px", color: "#426b36", fontWeight: "500", cursor: "pointer" }}>전체보기 →</span>
+              <span style={{ fontSize: "17px", fontWeight: "600", color: "#1f2a1a" }}>최근 동화</span>
+              <span onClick={() => router.push("/bookcase")} style={{ fontSize: "14px", color: "#426b36", fontWeight: "500", cursor: "pointer" }}>전체보기 →</span>
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
@@ -190,14 +190,14 @@ export default function Home() {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      fontSize: "18px",
+                      fontSize: "20px",
                       transition: "background 0.2s",
                     }}>
                       {story.emoji}
                     </div>
                     <div>
-                      <p style={{ fontSize: "14px", fontWeight: "500", color: "#1f2a1a", marginBottom: "3px" }}>{story.title}</p>
-                      <p style={{ fontSize: "12px", color: "#6b7765" }}>{story.sub}</p>
+                      <p style={{ fontSize: "16px", fontWeight: "500", color: "#1f2a1a", marginBottom: "3px" }}>{story.title}</p>
+                      <p style={{ fontSize: "14px", color: "#6b7765" }}>{story.sub}</p>
                     </div>
                   </div>
                   <div style={{
