@@ -27,14 +27,14 @@ function p(name: string, withBatchim: string, withoutBatchim: string): string {
 function getDialogues(name: string): string[] {
   return [
     "오늘 가장 신기했던 건 뭐야? 그때 어떤 느낌이 들었어?",
-    `${name}${p(name, "은", "는")} 오늘 동화에서 어떤 장면이 제일 좋았어?`,
+    `${name}${p(name, "이는", "는")} 오늘 동화에서 어떤 장면이 제일 좋았어?`,
     `${name}${p(name, "이라면", "라면")} 동화 주인공한테 뭐라고 말해줄 것 같아?`,
     "오늘 동화 결말이 마음에 들었어? 다르게 바꾼다면 어떻게 할 것 같아?",
     `동화 속 주인공이랑 ${name}${p(name, "이랑", "랑")} 어떤 점이 비슷한 것 같아?`,
     "오늘 동화에서 가장 용감한 순간은 어디였던 것 같아?",
     "오늘 동화를 친구한테 소개해준다면 뭐라고 할 것 같아?",
-    `${name}${p(name, "은", "는")} 오늘 하루 중에 가장 기억에 남는 게 뭐야?`,
-    `오늘 동화 주인공이 겪은 일이랑 비슷한 일이 ${name}한테도 있었어?`,
+    `${name}${p(name, "이는", "는")} 오늘 하루 중에 가장 기억에 남는 게 뭐야?`,
+    `오늘 동화 주인공이 겪은 일이랑 비슷한 일이 ${name}${p(name, "이", "")}한테도 있었어?`,
     `${name}${p(name, "이", "가")} 오늘 가장 잘했다고 생각하는 게 뭐야?`,
   ];
 }
@@ -124,24 +124,27 @@ export default function ReportPage() {
             display: "flex",
             flexDirection: "column",
             gap: "20px",
+            justifyContent: "space-between",
           }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <div style={{ width: "7px", height: "7px", borderRadius: "50%", backgroundColor: "#426b36" }} />
-              <span style={{ fontSize: "16px", color: "#426b36", fontWeight: "600" }}>오늘의 동화 요약</span>
-            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <div style={{ width: "7px", height: "7px", borderRadius: "50%", backgroundColor: "#426b36" }} />
+                <span style={{ fontSize: "16px", color: "#426b36", fontWeight: "600" }}>오늘의 동화 요약</span>
+              </div>
 
-            {storyTitle && (
-              <p className={gowunBatang.className} style={{ fontSize: "24px", fontWeight: "700", color: "#1f2a1a", margin: "0 0 12px" }}>
-                {storyTitle}
-              </p>
-            )}
-            <div style={{ borderLeft: "3px solid #426b36", paddingLeft: "18px" }}>
-              <p
-                className={gowunBatang.className}
-                style={{ fontSize: "18px", color: "#3e4a37", lineHeight: "1.9", margin: 0 }}
-              >
-                {storySummary || "유치원에서 만난 노란 나비를 따라\n지우가 꽃밭으로 떠난 작은 모험"}
-              </p>
+              {storyTitle && (
+                <p className={gowunBatang.className} style={{ fontSize: "25px", fontWeight: "700", color: "#1f2a1a", margin: "0 0 12px" }}>
+                  {storyTitle}
+                </p>
+              )}
+              <div style={{ borderLeft: "3px solid #426b36", paddingLeft: "18px" }}>
+                <p
+                  className={gowunBatang.className}
+                  style={{ fontSize: "18px", color: "#3e4a37", lineHeight: "1.9", margin: 0 }}
+                >
+                  {storySummary || "유치원에서 만난 노란 나비를 따라\n지우가 꽃밭으로 떠난 작은 모험"}
+                </p>
+              </div>
             </div>
 
             <div style={{
