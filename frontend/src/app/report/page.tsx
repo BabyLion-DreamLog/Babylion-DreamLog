@@ -72,6 +72,41 @@ export default function ReportPage() {
     saveWeekendActivity(pickedWeekend);
   }, []);
 
+  if (!storyTitle) {
+    return (
+      <div style={{ backgroundColor: "#fdfcf8", minHeight: "100vh", fontFamily: "sans-serif" }}>
+        <style>{`
+          @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+          }
+        `}</style>
+        <Navbar />
+        <div style={{
+          display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+          minHeight: "100vh", gap: "16px", textAlign: "center", padding: "0 24px",
+        }}>
+          <span style={{ fontSize: "52px", display: "inline-block", animation: "float 2.4s ease-in-out infinite" }}>🌱</span>
+          <p className={gowunBatang.className} style={{ fontSize: "20px", color: "#1f2a1a", margin: "-14px 0 12px" }}>
+            동화를 만들고 나면, 여기서 리포트를 볼 수 있어요 ✦
+          </p>
+          <p style={{ fontSize: "15px", color: "#6b7765", margin: 0 }}>
+            오늘 아이의 하루를 동화로 담아볼까요?
+          </p>
+          <a href="/create" style={{
+            marginTop: "-8px",
+            backgroundColor: "#5a8e4c", color: "#fff",
+            borderRadius: "50px", padding: "14px 32px",
+            fontSize: "16px", fontWeight: "600",
+            textDecoration: "none",
+          }}>
+            새 동화 만들기 →
+          </a>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ backgroundColor: "#fdfcf8", minHeight: "100vh", fontFamily: "sans-serif" }}>
       <Navbar />
