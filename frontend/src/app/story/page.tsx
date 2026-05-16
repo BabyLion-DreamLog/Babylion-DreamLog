@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useStoryStore } from "@/store/storyStore";
@@ -254,9 +254,8 @@ export default function StoryPage() {
                   const isDone = i < currentIndex;
                   const isActive = i === currentIndex;
                   return (
-                    <>
+                    <Fragment key={i}>
                       <button
-                        key={i}
                         className={`stage-dot-btn ${isActive ? "active-dot" : ""} ${isDone ? "done-dot" : ""}`}
                         onClick={() => !animating && setCurrentIndex(i)}
                         style={{
@@ -274,13 +273,13 @@ export default function StoryPage() {
                         {s.label}
                       </button>
                       {i < totalStages - 1 && (
-                        <div key={`line-${i}`} style={{
+                        <div style={{
                           flex: 1, height: 1,
                           background: i < currentIndex ? "#9fc0a8" : "#d4cfc4",
                           transition: "background 0.3s",
                         }} />
                       )}
-                    </>
+                    </Fragment>
                   );
                 })}
               </div>
