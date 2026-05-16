@@ -2,7 +2,7 @@
 
 import Navbar from "@/components/Navbar";
 import { Gowun_Batang } from "next/font/google";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useStoryStore } from "@/store/storyStore";
 
 const gowunBatang = Gowun_Batang({ subsets: ["latin"], weight: "400" });
@@ -45,19 +45,19 @@ const weekendActivities = [
 ];
 
 export default function ReportPage() {
-  const { name, duration, voice, storyTitle, storySummary } = useStoryStore();
+  const { name, duration, voice, storyTitle, storySummary, homeActivity } = useStoryStore();
   const dateStr = new Date().toLocaleDateString("ko-KR", {
     year: "numeric", month: "long", day: "numeric", weekday: "long",
   });
 
-  const dialogue = useMemo(() => {
-    const list = getDialogues(name || "OO");
-    return list[Math.floor(Math.random() * list.length)];
-  }, [name]);
+  const [dialogue, setDialogue] = useState("");
+  const [weekendActivity, setWeekendActivity] = useState("");
 
-  const weekendActivity = useMemo(() => {
-    return weekendActivities[Math.floor(Math.random() * weekendActivities.length)];
-  }, []);
+  useEffect(() => {
+    const list = getDialogues(name || "OO");
+    setDialogue(list[Math.floor(Math.random() * list.length)]);
+    setWeekendActivity(weekendActivities[Math.floor(Math.random() * weekendActivities.length)]);
+  }, [name]);
 
   return (
     <div style={{ backgroundColor: "#fdfcf8", minHeight: "100vh", fontFamily: "sans-serif" }}>
@@ -185,19 +185,19 @@ export default function ReportPage() {
                     padding: "4px 12px",
                     marginBottom: "12px",
                   }}>
-                    <span style={{ fontSize: "12px", color: "#e89b7a", fontWeight: "500" }}>🎨 가정 활동 추천 · 10분</span>
+                    <span style={{ fontSize: "12px", color: "#e89b7a", fontWeight: "500" }}>🎨 가정 활동 추천</span>
                   </div>
                   <h3 style={{ fontSize: "17px", fontWeight: "600", color: "#000", margin: "0 0 5px" }}>
-                    나비에게 그림 편지 보내기
+                    {homeActivity?.title ?? "나비에게 그림 편지 보내기"}
                   </h3>
                   <p style={{ fontSize: "12px", color: "#999", margin: 0 }}>
-                    관찰력과 표현력을 함께 기르는 활동
+                    {homeActivity?.description ?? "관찰력과 표현력을 함께 기르는 활동"}
                   </p>
                 </div>
                 <div style={{
                   width: "64px",
                   height: "64px",
-                  background: "radial-gradient(circle at 60% 40%, #ffe0c8 0%, #ffb07a 50%, #f4845f 100%)",
+                  background: homeActivity?.color ?? "#FFD6B0",
                   borderRadius: "14px",
                   display: "flex",
                   alignItems: "center",
@@ -205,7 +205,7 @@ export default function ReportPage() {
                   fontSize: "28px",
                   flexShrink: 0,
                 }}>
-                  🦋
+                  {homeActivity?.emoji ?? "🦋"}
                 </div>
               </div>
 
@@ -219,7 +219,7 @@ export default function ReportPage() {
                   이렇게 시작해보세요
                 </p>
                 <p style={{ fontSize: "13px", color: "#1f2a1a", lineHeight: "1.7", margin: 0 }}>
-                  "오늘 만난 노란 나비한테 그림 그려줄까? 어떤 꽃을 좋아할 것 같아?"
+                  {homeActivity?.tip ?? "오늘 만난 나비한테 그림 그려줄까? 어떤 꽃을 좋아할 것 같아?"}
                 </p>
               </div>
             </div>
