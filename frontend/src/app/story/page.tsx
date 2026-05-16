@@ -319,11 +319,10 @@ export default function StoryPage() {
                   {currentStage.text}
                 </p>
                 <span style={{
-                  fontFamily: "'Gowun Batang', serif",
-                  fontSize: 52, color: "#e8e2d8", lineHeight: 0.5,
-                  alignSelf: "flex-end", marginTop: "auto", userSelect: "none",
+                  fontSize: 28, color: "#4a7c59", lineHeight: 1,
+                  alignSelf: "flex-end", marginTop: "auto", userSelect: "none", opacity: 0.5,
                 }} aria-hidden>
-                  "
+                  ✦
                 </span>
               </div>
             )}
