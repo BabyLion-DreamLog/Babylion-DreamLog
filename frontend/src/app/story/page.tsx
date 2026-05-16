@@ -38,7 +38,7 @@ export default function StoryPage() {
       try {
         setLoading(true);
         setError(false);
-        const res = await fetch("http://localhost:8000/story/generate", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/story/generate`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ place, name, activity }),
