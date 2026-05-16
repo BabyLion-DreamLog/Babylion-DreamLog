@@ -235,16 +235,16 @@ export default function StoryPage() {
 
             {/* ── 헤더: 날짜 + 제목 ── */}
             <header style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              <span style={{ fontSize: 12, color: "#a89e8e", letterSpacing: "0.04em" }}>
+              <span style={{ fontSize: 14, color: "#a89e8e", letterSpacing: "0.04em" }}>
                 {dateStr}
               </span>
               <h1 style={{
                 fontFamily: "'Gowun Batang', serif",
                 fontSize: 26, fontWeight: 700, color: "#2e2a22", lineHeight: 1.4,
+                borderLeft: "3px solid #4a7c59", paddingLeft: 14, margin: 0,
               }}>
                 {story.title}
               </h1>
-              <div style={{ width: 36, height: 2, background: "#c5a97a", borderRadius: 2, marginTop: 4 }} />
             </header>
 
             {/* ── 단계 인디케이터 ── */}
