@@ -19,6 +19,7 @@ class Stage(BaseModel):
 
 class StoryResponse(BaseModel):
     title: str
+    summary: str
     stages: list[Stage]
 
 

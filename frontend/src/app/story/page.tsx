@@ -23,7 +23,7 @@ interface Story {
 // ─────────────────────────────────────────
 export default function StoryPage() {
   const router = useRouter();
-  const { place, name, activity, setStoryTitle } = useStoryStore();
+  const { place, name, activity, setStoryTitle, setStorySummary } = useStoryStore();
 
   const [story, setStory] = useState<Story | null>(null);
   const [loading, setLoading] = useState(true);
@@ -47,6 +47,7 @@ export default function StoryPage() {
         const data = await res.json();
         setStory(data);
         setStoryTitle(data.title);
+        setStorySummary(data.summary);
       } catch (e) {
         console.error(e);
         setError(true);

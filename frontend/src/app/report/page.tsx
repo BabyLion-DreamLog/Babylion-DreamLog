@@ -2,15 +2,62 @@
 
 import Navbar from "@/components/Navbar";
 import { Gowun_Batang } from "next/font/google";
+import { useMemo } from "react";
 import { useStoryStore } from "@/store/storyStore";
 
 const gowunBatang = Gowun_Batang({ subsets: ["latin"], weight: "400" });
 
+function hasBatchim(name: string): boolean {
+  const code = name.charCodeAt(name.length - 1);
+  return (code - 0xAC00) % 28 !== 0;
+}
+
+function p(name: string, withBatchim: string, withoutBatchim: string): string {
+  return hasBatchim(name) ? withBatchim : withoutBatchim;
+}
+
+function getDialogues(name: string): string[] {
+  return [
+    "오늘 가장 신기했던 건 뭐야? 그때 어떤 느낌이 들었어?",
+    `${name}${p(name, "은", "는")} 오늘 동화에서 어떤 장면이 제일 좋았어?`,
+    `${name}${p(name, "이라면", "라면")} 동화 주인공한테 뭐라고 말해줄 것 같아?`,
+    "오늘 동화 결말이 마음에 들었어? 다르게 바꾼다면 어떻게 할 것 같아?",
+    `동화 속 주인공이랑 ${name}${p(name, "이랑", "랑")} 어떤 점이 비슷한 것 같아?`,
+    "오늘 동화에서 가장 용감한 순간은 어디였던 것 같아?",
+    "오늘 동화를 친구한테 소개해준다면 뭐라고 할 것 같아?",
+    `${name}${p(name, "은", "는")} 오늘 하루 중에 가장 기억에 남는 게 뭐야?`,
+    `오늘 동화 주인공이 겪은 일이랑 비슷한 일이 ${name}한테도 있었어?`,
+    `${name}${p(name, "이", "가")} 오늘 가장 잘했다고 생각하는 게 뭐야?`,
+  ];
+}
+
+const weekendActivities = [
+  "오늘 동화 주인공처럼 역할극 해보기",
+  "점토로 오늘 동화에 나온 것 만들어보기",
+  "동화 속 장면 그림으로 그려보기",
+  "가족이랑 함께 도서관 가서 좋아하는 책 골라보기",
+  "동네 산책하면서 오늘 동화 이야기 나눠보기",
+  "동화 제목으로 나만의 책 표지 그려보기",
+  "오늘 동화를 인형이나 장난감으로 재연해보기",
+  "가족끼리 돌아가며 동화 한 장면씩 이어서 말하기",
+  "아이가 직접 동화 결말을 바꿔서 얘기해보기",
+  "동화 속 주인공에게 편지 써보기",
+];
+
 export default function ReportPage() {
-  const { name, duration, voice, storyTitle } = useStoryStore();
+  const { name, duration, voice, storyTitle, storySummary } = useStoryStore();
   const dateStr = new Date().toLocaleDateString("ko-KR", {
     year: "numeric", month: "long", day: "numeric", weekday: "long",
   });
+
+  const dialogue = useMemo(() => {
+    const list = getDialogues(name || "OO");
+    return list[Math.floor(Math.random() * list.length)];
+  }, [name]);
+
+  const weekendActivity = useMemo(() => {
+    return weekendActivities[Math.floor(Math.random() * weekendActivities.length)];
+  }, []);
 
   return (
     <div style={{ backgroundColor: "#fdfcf8", minHeight: "100vh", fontFamily: "sans-serif" }}>
@@ -40,7 +87,7 @@ export default function ReportPage() {
               className={gowunBatang.className}
               style={{ fontSize: "30px", color: "#1f2a1a", lineHeight: "1.55", margin: 0 }}
             >
-              {name}의 하루는<br />이런 동화가 되었어요
+              {name}{p(name || "OO", "이", "")}의 하루는<br />이런 동화가 되었어요
             </h1>
           </div>
           <div style={{ textAlign: "right" }}>
@@ -85,8 +132,7 @@ export default function ReportPage() {
                 className={gowunBatang.className}
                 style={{ fontSize: "18px", color: "#3e4a37", lineHeight: "1.9", margin: 0 }}
               >
-                유치원에서 만난 노란 나비를 따라<br />
-                지우가 꽃밭으로 떠난 작은 모험
+                {storySummary || "유치원에서 만난 노란 나비를 따라\n지우가 꽃밭으로 떠난 작은 모험"}
               </p>
             </div>
 
@@ -192,8 +238,7 @@ export default function ReportPage() {
                   오늘의 추천 대화
                 </p>
                 <p style={{ fontSize: "12px", color: "#1f2a1a", lineHeight: "1.7", margin: 0 }}>
-                  "오늘 가장 신기했던 건 뭐야?<br />
-                  그때 어떤 느낌이 들었어?"
+                  {dialogue}
                 </p>
               </div>
 
@@ -208,8 +253,7 @@ export default function ReportPage() {
                   이번 주말 활동 추천
                 </p>
                 <p style={{ fontSize: "12px", color: "#1f2a1a", lineHeight: "1.7", margin: 0 }}>
-                  근처 공원에서 곤충 찾기<br />
-                  나만의 &apos;나비 도감&apos; 만들기
+                  {weekendActivity}
                 </p>
               </div>
 

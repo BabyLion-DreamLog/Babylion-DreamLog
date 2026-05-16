@@ -24,6 +24,7 @@ def generate_story(place: str, name: str, activity: str) -> dict:
 
 {{
   "title": "동화 제목",
+  "summary": "동화 전체 내용을 시적으로 1~2문장으로 요약. 예: '{name}가 {place}에서 {activity}하며 작은 용기를 발견한 이야기'",
   "stages": [
     {{ "label": "기", "text": "이야기 시작 부분" }},
     {{ "label": "승", "text": "이야기 전개 부분" }},
