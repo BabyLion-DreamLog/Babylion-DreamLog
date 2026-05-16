@@ -29,7 +29,7 @@ export default function Navbar() {
       boxShadow: "0 1px 12px rgba(0,0,0,0.06)",
     }}>
       <Link href="/" style={{ textDecoration: "none" }}>
-        <span style={{ fontSize: "20px", fontWeight: "700", color: "#426b36", letterSpacing: "-0.5px" }}>
+        <span style={{ fontSize: "21px", fontWeight: "700", color: "#426b36", letterSpacing: "-0.5px" }}>
           DreamLog
         </span>
       </Link>
@@ -42,7 +42,7 @@ export default function Navbar() {
               key={href}
               href={href}
               style={{
-                fontSize: "14px",
+                fontSize: "15px",
                 color: active ? "#426b36" : "#6b7765",
                 cursor: "pointer",
                 fontWeight: active ? "600" : "400",

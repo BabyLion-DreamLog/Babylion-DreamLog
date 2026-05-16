@@ -26,8 +26,21 @@ const books = [
 export default function BookcasePage() {
   const [activeTab, setActiveTab] = useState<"books" | "starred">("books");
   const [hoveredBook, setHoveredBook] = useState<number | null>(null);
+  const [starredIds, setStarredIds] = useState<Set<number>>(
+    new Set(books.filter((b) => b.starred).map((b) => b.id))
+  );
 
-  const displayed = activeTab === "starred" ? books.filter((b) => b.starred) : books;
+  function toggleStar(id: number) {
+    setStarredIds((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  }
+
+  const displayed = activeTab === "starred"
+    ? books.filter((b) => starredIds.has(b.id))
+    : books;
   const mayBooks = displayed.filter((b) => b.date.startsWith("2026.05"));
   const aprBooks = displayed.filter((b) => b.date.startsWith("2026.04"));
 
@@ -39,10 +52,10 @@ export default function BookcasePage() {
 
         {/* 페이지 제목 */}
         <div style={{ marginBottom: "28px" }}>
-          <h1 style={{ fontSize: "26px", fontWeight: "700", color: "#1f2a1a", margin: "0 0 4px" }}>
+          <h1 style={{ fontSize: "28px", fontWeight: "700", color: "#1f2a1a", margin: "0 0 4px" }}>
             지우의 책장
           </h1>
-          <p style={{ fontSize: "13px", color: "#6b7765", margin: 0 }}>
+          <p style={{ fontSize: "15px", color: "#6b7765", margin: 0 }}>
             지금까지 만든 동화를 모아볼 수 있어요
           </p>
         </div>
@@ -71,7 +84,7 @@ export default function BookcasePage() {
                   borderRadius: "10px",
                   border: "none",
                   cursor: "pointer",
-                  fontSize: "13px",
+                  fontSize: "15px",
                   fontWeight: "500",
                   backgroundColor: activeTab === key ? "#5a8e4c" : "transparent",
                   color: activeTab === key ? "#fff" : "#6b7765",
@@ -85,11 +98,11 @@ export default function BookcasePage() {
 
           {/* 총 N권 + 정렬 */}
           <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-            <span style={{ fontSize: "13px", color: "#426b36", fontWeight: "600" }}>
+            <span style={{ fontSize: "15px", color: "#426b36", fontWeight: "600" }}>
               총 {displayed.length}권
             </span>
             <button style={{
-              fontSize: "13px",
+              fontSize: "15px",
               color: "#6b7765",
               background: "none",
               border: "1px solid #e0dbd2",
@@ -117,11 +130,11 @@ export default function BookcasePage() {
           justifyContent: "space-between",
         }}>
           <div>
-            <p style={{ fontSize: "12px", color: "#898989", margin: "0 0 6px" }}>✨ 이 달의 기억</p>
-            <p style={{ fontSize: "16px", fontWeight: "600", color: "#2c2c2c", margin: "0 0 6px" }}>
+            <p style={{ fontSize: "14px", color: "#898989", margin: "0 0 6px" }}>✨ 이 달의 기억</p>
+            <p style={{ fontSize: "18px", fontWeight: "600", color: "#2c2c2c", margin: "0 0 6px" }}>
               "바닷속 친구들을 3번 다시 읽었어요"
             </p>
-            <p style={{ fontSize: "13px", color: "#4e7952", margin: 0 }}>2026년 5월 · 지우 6살</p>
+            <p style={{ fontSize: "15px", color: "#4e7952", margin: 0 }}>2026년 5월 · 지우 6살</p>
           </div>
           <div style={{ fontSize: "36px" }}>🌊</div>
         </div>
@@ -129,7 +142,7 @@ export default function BookcasePage() {
         {/* 5월 섹션 */}
         {mayBooks.length > 0 && (
           <section style={{ marginBottom: "36px" }}>
-            <p style={{ fontSize: "14px", fontWeight: "600", color: "#5a8e4c", margin: "0 0 16px" }}>
+            <p style={{ fontSize: "16px", fontWeight: "600", color: "#5a8e4c", margin: "0 0 16px" }}>
               2026 5월
             </p>
             <div style={{
@@ -141,6 +154,8 @@ export default function BookcasePage() {
                 <BookCard
                   key={book.id}
                   book={book}
+                  starred={starredIds.has(book.id)}
+                  onToggleStar={() => toggleStar(book.id)}
                   hovered={hoveredBook === book.id}
                   onMouseEnter={() => setHoveredBook(book.id)}
                   onMouseLeave={() => setHoveredBook(null)}
@@ -153,7 +168,7 @@ export default function BookcasePage() {
         {/* 4월 섹션 */}
         {aprBooks.length > 0 && (
           <section>
-            <p style={{ fontSize: "14px", fontWeight: "600", color: "#5a8e4c", margin: "0 0 16px" }}>
+            <p style={{ fontSize: "16px", fontWeight: "600", color: "#5a8e4c", margin: "0 0 16px" }}>
               2026 4월
             </p>
             <div style={{
@@ -165,6 +180,8 @@ export default function BookcasePage() {
                 <BookCard
                   key={book.id}
                   book={book}
+                  starred={starredIds.has(book.id)}
+                  onToggleStar={() => toggleStar(book.id)}
                   hovered={hoveredBook === book.id}
                   onMouseEnter={() => setHoveredBook(book.id)}
                   onMouseLeave={() => setHoveredBook(null)}
@@ -189,17 +206,19 @@ type Book = {
 
 function BookCard({
   book,
+  starred,
+  onToggleStar,
   hovered,
   onMouseEnter,
   onMouseLeave,
 }: {
   book: Book;
+  starred: boolean;
+  onToggleStar: () => void;
   hovered: boolean;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
 }) {
-  const [starred, setStarred] = useState(book.starred);
-
   return (
     <div
       onMouseEnter={onMouseEnter}
@@ -227,7 +246,7 @@ function BookCard({
 
       {/* 즐겨찾기 버튼 */}
       <button
-        onClick={(e) => { e.stopPropagation(); setStarred(!starred); }}
+        onClick={(e) => { e.stopPropagation(); onToggleStar(); }}
         style={{
           position: "absolute",
           top: "8px",
@@ -249,10 +268,10 @@ function BookCard({
       </button>
 
       {/* 제목 + 날짜 */}
-      <p style={{ fontSize: "15px", fontWeight: "600", color: "#1f2a1a", margin: "0 0 2px", textAlign: "center" }}>
+      <p style={{ fontSize: "17px", fontWeight: "600", color: "#1f2a1a", margin: "0 0 2px", textAlign: "center" }}>
         {book.title}
       </p>
-      <p style={{ fontSize: "11px", color: "#898989", margin: 0, textAlign: "center" }}>
+      <p style={{ fontSize: "13px", color: "#898989", margin: 0, textAlign: "center" }}>
         {book.date}
       </p>
     </div>
