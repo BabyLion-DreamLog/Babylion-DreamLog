@@ -2,10 +2,111 @@
 
 import Navbar from "@/components/Navbar";
 import { Gowun_Batang } from "next/font/google";
+import { useEffect, useMemo, useState } from "react";
+import { useStoryStore } from "@/store/storyStore";
 
 const gowunBatang = Gowun_Batang({ subsets: ["latin"], weight: "400" });
 
+function darken(hex: string, factor: number): string {
+  const n = parseInt(hex.replace("#", ""), 16);
+  const r = Math.floor(((n >> 16) & 0xff) * factor);
+  const g = Math.floor(((n >> 8) & 0xff) * factor);
+  const b = Math.floor((n & 0xff) * factor);
+  return `rgb(${r},${g},${b})`;
+}
+
+function hasBatchim(name: string): boolean {
+  const code = name.charCodeAt(name.length - 1);
+  return (code - 0xAC00) % 28 !== 0;
+}
+
+function p(name: string, withBatchim: string, withoutBatchim: string): string {
+  return hasBatchim(name) ? withBatchim : withoutBatchim;
+}
+
+function getDialogues(name: string): string[] {
+  return [
+    "오늘 가장 신기했던 건 뭐야? 그때 어떤 느낌이 들었어?",
+    `${name}${p(name, "이는", "는")} 오늘 동화에서 어떤 장면이 제일 좋았어?`,
+    `${name}${p(name, "이라면", "라면")} 동화 주인공한테 뭐라고 말해줄 것 같아?`,
+    "오늘 동화 결말이 마음에 들었어? 다르게 바꾼다면 어떻게 할 것 같아?",
+    `동화 속 주인공이랑 ${name}${p(name, "이랑", "랑")} 어떤 점이 비슷한 것 같아?`,
+    "오늘 동화에서 가장 용감한 순간은 어디였던 것 같아?",
+    "오늘 동화를 친구한테 소개해준다면 뭐라고 할 것 같아?",
+    `${name}${p(name, "이는", "는")} 오늘 하루 중에 가장 기억에 남는 게 뭐야?`,
+    `오늘 동화 주인공이 겪은 일이랑 비슷한 일이 ${name}${p(name, "이", "")}한테도 있었어?`,
+    `${name}${p(name, "이", "가")} 오늘 가장 잘했다고 생각하는 게 뭐야?`,
+  ];
+}
+
+const weekendActivities = [
+  "오늘 동화 주인공처럼 역할극 해보기",
+  "점토로 오늘 동화에 나온 것 만들어보기",
+  "동화 속 장면 그림으로 그려보기",
+  "가족이랑 함께 도서관 가서 좋아하는 책 골라보기",
+  "동네 산책하면서 오늘 동화 이야기 나눠보기",
+  "동화 제목으로 나만의 책 표지 그려보기",
+  "오늘 동화를 인형이나 장난감으로 재연해보기",
+  "가족끼리 돌아가며 동화 한 장면씩 이어서 말하기",
+  "아이가 직접 동화 결말을 바꿔서 얘기해보기",
+  "동화 속 주인공에게 편지 써보기",
+];
+
 export default function ReportPage() {
+  const { name, duration, voice, storyTitle, storySummary, homeActivity, dialogue: storedDialogue, weekendActivity: storedWeekendActivity, setDialogue: saveDialogue, setWeekendActivity: saveWeekendActivity } = useStoryStore();
+  const dateStr = new Date().toLocaleDateString("ko-KR", {
+    year: "numeric", month: "long", day: "numeric", weekday: "long",
+  });
+
+  const [dialogue, setDialogue] = useState(storedDialogue);
+  const [weekendActivity, setWeekendActivity] = useState(storedWeekendActivity);
+
+  useEffect(() => {
+    if (storedDialogue && storedWeekendActivity) return;
+    const list = getDialogues(name || "OO");
+    const picked = list[Math.floor(Math.random() * list.length)];
+    const pickedWeekend = weekendActivities[Math.floor(Math.random() * weekendActivities.length)];
+    setDialogue(picked);
+    setWeekendActivity(pickedWeekend);
+    saveDialogue(picked);
+    saveWeekendActivity(pickedWeekend);
+  }, []);
+
+  if (!storyTitle) {
+    return (
+      <div style={{ backgroundColor: "#fdfcf8", minHeight: "100vh", fontFamily: "sans-serif" }}>
+        <style>{`
+          @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+          }
+        `}</style>
+        <Navbar />
+        <div style={{
+          display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+          minHeight: "100vh", gap: "16px", textAlign: "center", padding: "0 24px",
+        }}>
+          <span style={{ fontSize: "52px", display: "inline-block", animation: "float 2.4s ease-in-out infinite" }}>🌱</span>
+          <p className={gowunBatang.className} style={{ fontSize: "20px", color: "#1f2a1a", margin: "-14px 0 12px" }}>
+            동화를 만들고 나면, 여기서 리포트를 볼 수 있어요 ✦
+          </p>
+          <p style={{ fontSize: "15px", color: "#6b7765", margin: 0 }}>
+            오늘 아이의 하루를 동화로 담아볼까요?
+          </p>
+          <a href="/create" style={{
+            marginTop: "-8px",
+            backgroundColor: "#5a8e4c", color: "#fff",
+            borderRadius: "50px", padding: "14px 32px",
+            fontSize: "16px", fontWeight: "600",
+            textDecoration: "none",
+          }}>
+            새 동화 만들기 →
+          </a>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ backgroundColor: "#fdfcf8", minHeight: "100vh", fontFamily: "sans-serif" }}>
       <Navbar />
@@ -24,17 +125,17 @@ export default function ReportPage() {
           alignItems: "flex-end",
         }}>
           <div>
-            <p style={{ fontSize: "13px", color: "#426b36", marginBottom: "14px", letterSpacing: "0.5px", fontWeight: "500" }}>
-              2026. 5. 10. 일요일
+            <p style={{ fontSize: "17px", color: "#426b36", marginBottom: "14px", letterSpacing: "0.5px", fontWeight: "500" }}>
+              {dateStr}
             </p>
-            <p style={{ fontSize: "13px", color: "#6b7765", marginBottom: "10px" }}>
+            <p style={{ fontSize: "17px", color: "#6b7765", marginBottom: "10px" }}>
               오늘의 동화 리포트
             </p>
             <h1
               className={gowunBatang.className}
               style={{ fontSize: "30px", color: "#1f2a1a", lineHeight: "1.55", margin: 0 }}
             >
-              지우의 하루는<br />이런 동화가 되었어요
+              {name}{p(name || "OO", "이", "")}의 하루는<br />이런 동화가 되었어요
             </h1>
           </div>
           <div style={{ textAlign: "right" }}>
@@ -44,9 +145,9 @@ export default function ReportPage() {
               color: "#6b7765",
               fontSize: "14px",
             }}>
-              <span>⏱ 8분</span>
+              <span>⏱ {duration}분</span>
               <span>💬 4번 대화</span>
-              <span>🎙 엄마 목소리</span>
+              <span>🎙 {voice}</span>
             </div>
           </div>
         </div>
@@ -63,20 +164,27 @@ export default function ReportPage() {
             display: "flex",
             flexDirection: "column",
             gap: "20px",
+            justifyContent: "space-between",
           }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <div style={{ width: "7px", height: "7px", borderRadius: "50%", backgroundColor: "#426b36" }} />
-              <span style={{ fontSize: "14px", color: "#426b36", fontWeight: "600" }}>오늘의 동화 요약</span>
-            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <div style={{ width: "7px", height: "7px", borderRadius: "50%", backgroundColor: "#426b36" }} />
+                <span style={{ fontSize: "16px", color: "#426b36", fontWeight: "600" }}>오늘의 동화 요약</span>
+              </div>
 
-            <div style={{ borderLeft: "3px solid #426b36", paddingLeft: "18px" }}>
-              <p
-                className={gowunBatang.className}
-                style={{ fontSize: "16px", color: "#3e4a37", lineHeight: "1.9", margin: 0 }}
-              >
-                유치원에서 만난 노란 나비를 따라<br />
-                지우가 꽃밭으로 떠난 작은 모험
-              </p>
+              {storyTitle && (
+                <p className={gowunBatang.className} style={{ fontSize: "25px", fontWeight: "700", color: "#1f2a1a", margin: "0 0 12px" }}>
+                  {storyTitle}
+                </p>
+              )}
+              <div style={{ borderLeft: "3px solid #426b36", paddingLeft: "18px" }}>
+                <p
+                  className={gowunBatang.className}
+                  style={{ fontSize: "18px", color: "#3e4a37", lineHeight: "1.9", margin: 0 }}
+                >
+                  {storySummary || "유치원에서 만난 노란 나비를 따라\n지우가 꽃밭으로 떠난 작은 모험"}
+                </p>
+              </div>
             </div>
 
             <div style={{
@@ -88,21 +196,21 @@ export default function ReportPage() {
               gap: "10px",
               border: "1px solid #ede9e0",
             }}>
-              <p style={{ fontSize: "12px", color: "#6b7765", fontWeight: "500", margin: 0 }}>이야기 정보</p>
+              <p style={{ fontSize: "14px", color: "#6b7765", fontWeight: "500", margin: 0 }}>이야기 정보</p>
               <div style={{ display: "flex", gap: "20px" }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                  <span style={{ fontSize: "11px", color: "#6b7765" }}>소요 시간</span>
-                  <span style={{ fontSize: "13px", color: "#3e4a37", fontWeight: "500" }}>⏱ 8분</span>
+                  <span style={{ fontSize: "13px", color: "#6b7765" }}>소요 시간</span>
+                  <span style={{ fontSize: "15px", color: "#3e4a37", fontWeight: "500" }}>⏱ {duration}분</span>
                 </div>
                 <div style={{ width: "1px", backgroundColor: "#ede9e0" }} />
                 <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                  <span style={{ fontSize: "11px", color: "#6b7765" }}>대화 수</span>
-                  <span style={{ fontSize: "13px", color: "#3e4a37", fontWeight: "500" }}>💬 4번</span>
+                  <span style={{ fontSize: "13px", color: "#6b7765" }}>대화 수</span>
+                  <span style={{ fontSize: "15px", color: "#3e4a37", fontWeight: "500" }}>💬 4번</span>
                 </div>
                 <div style={{ width: "1px", backgroundColor: "#ede9e0" }} />
                 <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                  <span style={{ fontSize: "11px", color: "#6b7765" }}>읽어준 사람</span>
-                  <span style={{ fontSize: "13px", color: "#3e4a37", fontWeight: "500" }}>🎙 엄마 목소리</span>
+                  <span style={{ fontSize: "13px", color: "#6b7765" }}>읽어준 사람</span>
+                  <span style={{ fontSize: "15px", color: "#3e4a37", fontWeight: "500" }}>🎙 {voice}</span>
                 </div>
               </div>
             </div>
@@ -123,46 +231,46 @@ export default function ReportPage() {
                   <div style={{
                     display: "inline-flex",
                     alignItems: "center",
-                    backgroundColor: "#fdf5ef",
+                    backgroundColor: homeActivity?.color ? `${homeActivity.color}33` : "#fdf5ef",
                     borderRadius: "20px",
                     padding: "4px 12px",
                     marginBottom: "12px",
                   }}>
-                    <span style={{ fontSize: "12px", color: "#e89b7a", fontWeight: "500" }}>🎨 가정 활동 추천 · 10분</span>
+                    <span style={{ fontSize: "14px", color: homeActivity?.color ? darken(homeActivity.color, 0.7) : "#e89b7a", fontWeight: "500" }}>🎨 가정 활동 추천</span>
                   </div>
-                  <h3 style={{ fontSize: "17px", fontWeight: "600", color: "#000", margin: "0 0 5px" }}>
-                    나비에게 그림 편지 보내기
+                  <h3 style={{ fontSize: "18px", fontWeight: "600", color: "#000", margin: "0 0 5px" }}>
+                    {homeActivity?.title ?? "나비에게 그림 편지 보내기"}
                   </h3>
-                  <p style={{ fontSize: "12px", color: "#999", margin: 0 }}>
-                    관찰력과 표현력을 함께 기르는 활동
+                  <p style={{ fontSize: "13px", color: "#999", margin: 0 }}>
+                    {homeActivity?.description ?? "관찰력과 표현력을 함께 기르는 활동"}
                   </p>
                 </div>
                 <div style={{
                   width: "64px",
                   height: "64px",
-                  background: "radial-gradient(circle at 60% 40%, #ffe0c8 0%, #ffb07a 50%, #f4845f 100%)",
+                  background: homeActivity?.color ?? "#FFD6B0",
                   borderRadius: "14px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontSize: "28px",
+                  fontSize: "30px",
                   flexShrink: 0,
                 }}>
-                  🦋
+                  {homeActivity?.emoji ?? "🦋"}
                 </div>
               </div>
 
               <div style={{
-                backgroundColor: "#fdfcf8",
+                backgroundColor: homeActivity?.color ? `${homeActivity.color}1A` : "#fdfcf8",
                 borderRadius: "12px",
                 padding: "16px 18px",
-                border: "1px solid #ede9e0",
+                border: `1px solid ${homeActivity?.color ? `${homeActivity.color}44` : "#ede9e0"}`,
               }}>
-                <p style={{ fontSize: "12px", color: "#ec7d4e", fontWeight: "600", margin: "0 0 6px" }}>
+                <p style={{ fontSize: "14px", color: homeActivity?.color ? darken(homeActivity.color, 0.5) : "#ec7d4e", fontWeight: "600", margin: "0 0 6px" }}>
                   이렇게 시작해보세요
                 </p>
-                <p style={{ fontSize: "13px", color: "#1f2a1a", lineHeight: "1.7", margin: 0 }}>
-                  "오늘 만난 노란 나비한테 그림 그려줄까? 어떤 꽃을 좋아할 것 같아?"
+                <p style={{ fontSize: "15px", color: "#1f2a1a", lineHeight: "1.7", margin: 0 }}>
+                  {homeActivity?.tip ?? "오늘 만난 나비한테 그림 그려줄까? 어떤 꽃을 좋아할 것 같아?"}
                 </p>
               </div>
             </div>
@@ -176,13 +284,12 @@ export default function ReportPage() {
                 padding: "24px 22px",
                 boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
               }}>
-                <div style={{ fontSize: "22px", marginBottom: "12px" }}>💬</div>
-                <p style={{ fontSize: "12px", color: "#426b36", fontWeight: "600", margin: "0 0 10px" }}>
+                <div style={{ fontSize: "26px", marginBottom: "12px" }}>💬</div>
+                <p style={{ fontSize: "15px", color: "#426b36", fontWeight: "600", margin: "0 0 10px" }}>
                   오늘의 추천 대화
                 </p>
-                <p style={{ fontSize: "12px", color: "#1f2a1a", lineHeight: "1.7", margin: 0 }}>
-                  "오늘 가장 신기했던 건 뭐야?<br />
-                  그때 어떤 느낌이 들었어?"
+                <p style={{ fontSize: "15px", color: "#1f2a1a", lineHeight: "1.7", margin: 0 }}>
+                  {dialogue}
                 </p>
               </div>
 
@@ -192,13 +299,12 @@ export default function ReportPage() {
                 padding: "24px 22px",
                 boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
               }}>
-                <div style={{ fontSize: "22px", marginBottom: "12px" }}>🌿</div>
-                <p style={{ fontSize: "12px", color: "#426b36", fontWeight: "600", margin: "0 0 10px" }}>
+                <div style={{ fontSize: "26px", marginBottom: "12px" }}>🌿</div>
+                <p style={{ fontSize: "15px", color: "#426b36", fontWeight: "600", margin: "0 0 10px" }}>
                   이번 주말 활동 추천
                 </p>
-                <p style={{ fontSize: "12px", color: "#1f2a1a", lineHeight: "1.7", margin: 0 }}>
-                  근처 공원에서 곤충 찾기<br />
-                  나만의 &apos;나비 도감&apos; 만들기
+                <p style={{ fontSize: "15px", color: "#1f2a1a", lineHeight: "1.7", margin: 0 }}>
+                  {weekendActivity}
                 </p>
               </div>
 

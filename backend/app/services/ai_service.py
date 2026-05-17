@@ -24,6 +24,14 @@ def generate_story(place: str, name: str, activity: str) -> dict:
 
 {{
   "title": "동화 제목",
+  "summary": "동화 전체 내용을 시적으로 1~2문장으로 요약. 예: '{name}가 {place}에서 {activity}하며 작은 용기를 발견한 이야기'",
+  "home_activity": {{
+    "title": "가정 활동 제목 (10자 이내)",
+    "description": "활동 설명 한 줄 (예: 관찰력과 표현력을 함께 기르는 활동)",
+    "tip": "아이에게 건네는 시작 멘트 (예: '오늘 만난 나비한테 그림 그려줄까?')",
+    "emoji": "활동과 어울리는 이모지 1개",
+    "color": "이모지 배경색 hex 코드 (파스텔 톤 권장, 예: #FFD6B0)"
+  }},
   "stages": [
     {{ "label": "기", "text": "이야기 시작 부분" }},
     {{ "label": "승", "text": "이야기 전개 부분" }},

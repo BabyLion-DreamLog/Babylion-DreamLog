@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useStoryStore } from "@/store/storyStore";
@@ -23,7 +23,7 @@ interface Story {
 // ─────────────────────────────────────────
 export default function StoryPage() {
   const router = useRouter();
-  const { place, name, activity } = useStoryStore();
+  const { place, name, activity, homeActivity, setStoryTitle, setStorySummary, setHomeActivity, setDialogue, setWeekendActivity } = useStoryStore();
 
   const [story, setStory] = useState<Story | null>(null);
   const [loading, setLoading] = useState(true);
@@ -31,6 +31,23 @@ export default function StoryPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
   const [animating, setAnimating] = useState(false);
+  const [loadingIndex, setLoadingIndex] = useState(0);
+
+  const hasBatchim = (n: string) => (n.charCodeAt(n.length - 1) - 0xAC00) % 28 !== 0;
+  const nameWithParticle = name ? `${name}${hasBatchim(name) ? "이의" : "의"}` : "OO의";
+
+  const loadingSteps = [
+    { emoji: "🌱", message: `${nameWithParticle} 동화를 만들고 있어요 ✦` },
+    { emoji: "📖", message: "이야기를 엮고 있어요 ✦" },
+  ];
+
+  useEffect(() => {
+    if (!loading) return;
+    const timer = setInterval(() => {
+      setLoadingIndex((i) => (i + 1) % loadingSteps.length);
+    }, 2000);
+    return () => clearInterval(timer);
+  }, [loading]);
 
   // ── API 호출 ──
   useEffect(() => {
@@ -38,7 +55,9 @@ export default function StoryPage() {
       try {
         setLoading(true);
         setError(false);
-        const res = await fetch("http://localhost:8000/story/generate", {
+        setDialogue("");
+        setWeekendActivity("");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/story/generate`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ place, name, activity }),
@@ -46,6 +65,9 @@ export default function StoryPage() {
         if (!res.ok) throw new Error("API 오류");
         const data = await res.json();
         setStory(data);
+        setStoryTitle(data.title);
+        setStorySummary(data.summary);
+        setHomeActivity(data.home_activity);
       } catch (e) {
         console.error(e);
         setError(true);
@@ -98,9 +120,15 @@ export default function StoryPage() {
       <>
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap');
-          @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
+          @keyframes grow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+          }
+          .loading-emoji {
+            animation: grow 2s ease-in-out infinite;
+          }
+          .loading-message {
+            transition: opacity 0.4s ease;
           }
         `}</style>
         <div style={{
@@ -110,13 +138,15 @@ export default function StoryPage() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          gap: 16,
+          gap: 20,
         }}>
-          <span style={{ fontSize: 48, animation: "pulse 1.8s ease-in-out infinite" }}>🌱</span>
-          <p style={{ fontFamily: "'Gowun Batang', serif", fontSize: 18, color: "#4a7c59" }}>
-            동화를 만들고 있어요...
+          <span className="loading-emoji" style={{ fontSize: 56 }}>
+            {loadingSteps[loadingIndex].emoji}
+          </span>
+          <p className="loading-message" style={{ fontFamily: "'Gowun Batang', serif", fontSize: 18, color: "#4a7c59", margin: 0 }}>
+            {loadingSteps[loadingIndex].message}
           </p>
-          <p style={{ fontSize: 13, color: "#a89e8e" }}>잠시만 기다려주세요</p>
+          <p style={{ fontSize: 13, color: "#a89e8e", margin: 0 }}>잠시만 기다려주세요</p>
         </div>
       </>
     );
@@ -235,16 +265,16 @@ export default function StoryPage() {
 
             {/* ── 헤더: 날짜 + 제목 ── */}
             <header style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              <span style={{ fontSize: 12, color: "#a89e8e", letterSpacing: "0.04em" }}>
+              <span style={{ fontSize: 16, color: "#a89e8e", letterSpacing: "0.04em" }}>
                 {dateStr}
               </span>
               <h1 style={{
                 fontFamily: "'Gowun Batang', serif",
-                fontSize: 26, fontWeight: 700, color: "#2e2a22", lineHeight: 1.4,
+                fontSize: 28, fontWeight: 700, color: "#2e2a22", lineHeight: 1.4,
+                borderLeft: "3px solid #4a7c59", paddingLeft: 14, margin: 0,
               }}>
                 {story.title}
               </h1>
-              <div style={{ width: 36, height: 2, background: "#c5a97a", borderRadius: 2, marginTop: 4 }} />
             </header>
 
             {/* ── 단계 인디케이터 ── */}
@@ -254,9 +284,8 @@ export default function StoryPage() {
                   const isDone = i < currentIndex;
                   const isActive = i === currentIndex;
                   return (
-                    <>
+                    <Fragment key={i}>
                       <button
-                        key={i}
                         className={`stage-dot-btn ${isActive ? "active-dot" : ""} ${isDone ? "done-dot" : ""}`}
                         onClick={() => !animating && setCurrentIndex(i)}
                         style={{
@@ -269,18 +298,18 @@ export default function StoryPage() {
                           color: isActive ? "#fff" : isDone ? "#5a8a6a" : "#b0a899",
                           cursor: "pointer", transition: "all 0.25s", flexShrink: 0,
                         }}
-                        aria-label={`${s.label} 단계`}
+                        aria-label={`${i + 1} 단계`}
                       >
-                        {s.label}
+                        {i + 1}
                       </button>
                       {i < totalStages - 1 && (
-                        <div key={`line-${i}`} style={{
+                        <div style={{
                           flex: 1, height: 1,
                           background: i < currentIndex ? "#9fc0a8" : "#d4cfc4",
                           transition: "background 0.3s",
                         }} />
                       )}
-                    </>
+                    </Fragment>
                   );
                 })}
               </div>
@@ -309,7 +338,7 @@ export default function StoryPage() {
                   letterSpacing: "0.08em", background: "#eef5f0",
                   padding: "4px 12px", borderRadius: 20, width: "fit-content",
                 }}>
-                  ✦ {currentStage.label}
+                  ✦ {currentIndex + 1}/{totalStages}
                 </span>
                 <p style={{
                   fontFamily: "'Gowun Batang', serif",
@@ -320,11 +349,10 @@ export default function StoryPage() {
                   {currentStage.text}
                 </p>
                 <span style={{
-                  fontFamily: "'Gowun Batang', serif",
-                  fontSize: 52, color: "#e8e2d8", lineHeight: 0.5,
-                  alignSelf: "flex-end", marginTop: "auto", userSelect: "none",
+                  fontSize: 28, color: "#4a7c59", lineHeight: 1,
+                  alignSelf: "flex-end", marginTop: "auto", userSelect: "none", opacity: 0.5,
                 }} aria-hidden>
-                  "
+                  ✦
                 </span>
               </div>
             )}
@@ -336,20 +364,40 @@ export default function StoryPage() {
                 alignItems: "center", gap: 12,
                 padding: "32px 0 8px", textAlign: "center",
               }}>
-                <span style={{ fontSize: 48 }} role="img" aria-label="꽃">🌸</span>
-                <h2 style={{ fontFamily: "'Gowun Batang', serif", fontSize: 22, color: "#2e2a22", marginTop: 4 }}>
-                  동화가 끝났어요
-                </h2>
-                <p style={{ fontSize: 13, color: "#a89e8e", lineHeight: 1.8 }}>
-                  오늘 {name}의 하루가<br />소중한 동화 한 편이 되었어요.
-                </p>
+                <div style={{
+                  width: "100%",
+                  background: homeActivity?.color ? `${homeActivity.color}22` : "#eef5f0",
+                  borderRadius: 20,
+                  border: `1px solid ${homeActivity?.color ? `${homeActivity.color}44` : "#d4e8da"}`,
+                  padding: "32px 24px 28px",
+                  position: "relative",
+                  overflow: "hidden",
+                  display: "flex", flexDirection: "column", alignItems: "center", gap: 12,
+                }}>
+                  <div style={{
+                    position: "absolute", top: 0, left: 0, right: 0,
+                    height: 3,
+                    background: homeActivity?.color ?? "#4a7c59",
+                    borderRadius: "20px 20px 0 0",
+                  }} />
+                  <span style={{ fontSize: 64 }} role="img" aria-label="꽃">{homeActivity?.emoji ?? "🌸"}</span>
+                  <h2 style={{ fontFamily: "'Gowun Batang', serif", fontSize: 24, color: "#2e2a22", margin: 0 }}>
+                    동화가 끝났어요
+                  </h2>
+                  <p style={{ fontSize: 15, color: "#a89e8e", lineHeight: 1.8, margin: 0 }}>
+                    오늘 {nameWithParticle} 하루가<br />소중한 동화 한 편이 되었어요.
+                  </p>
+                  <p style={{ fontSize: 13, color: "#8a8070", margin: "8px 0 0" }}>
+                    리포트에서 오늘의 추천 활동을 확인해보세요 ✦
+                  </p>
+                </div>
                 <div style={{ display: "flex", gap: 10, marginTop: 16, width: "100%" }}>
                   <button
                     onClick={handleRestart}
                     style={{
                       flex: 1, height: 48, borderRadius: 24,
                       border: "1.5px solid #d4cfc4", background: "#fff",
-                      fontSize: 14, color: "#6b6457", cursor: "pointer",
+                      fontSize: 16, color: "#6b6457", cursor: "pointer",
                       fontFamily: "'Noto Sans KR', sans-serif",
                     }}
                   >
@@ -357,7 +405,8 @@ export default function StoryPage() {
                   </button>
                   <Link href="/report" style={{
                     flex: 1, height: 48, borderRadius: 24,
-                    background: "#4a7c59", color: "#fff", fontSize: 14,
+                    background: homeActivity?.color ?? "#4a7c59", color: "#3a3530", fontSize: 16,
+                    border: "1px solid #b0a899",
                     display: "flex", alignItems: "center", justifyContent: "center",
                     textDecoration: "none", fontFamily: "'Noto Sans KR', sans-serif",
                   }}>
@@ -389,9 +438,10 @@ export default function StoryPage() {
                 <button
                   onClick={goNext}
                   style={{
-                    flex: 1, height: 52, borderRadius: 26, border: "none",
-                    background: isLastStage ? "#c5a97a" : "#4a7c59",
-                    color: "#fff", fontSize: 15, cursor: "pointer",
+                    flex: 1, height: 52, borderRadius: 26,
+                    border: isLastStage ? "1px solid #b0a899" : "none",
+                    background: isLastStage ? (homeActivity?.color ?? "#c5a97a") : "#4a7c59",
+                    color: isLastStage ? "#3a3530" : "#fff", fontSize: 15, cursor: "pointer",
                     transition: "background 0.25s",
                     fontFamily: "'Noto Sans KR', sans-serif",
                     letterSpacing: "0.02em",

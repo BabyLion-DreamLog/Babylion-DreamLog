@@ -17,8 +17,17 @@ class Stage(BaseModel):
     text: str
 
 
+class HomeActivity(BaseModel):
+    title: str
+    description: str
+    tip: str
+    emoji: str
+    color: str
+
 class StoryResponse(BaseModel):
     title: str
+    summary: str
+    home_activity: HomeActivity
     stages: list[Stage]
 
 
